@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <TmobLabs_Tappz>
+            <active>true</active>
+            <codePool>community</codePool>
+        </TmobLabs_Tappz>
+    </modules>
+</config>

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <api>
+        <resources>
+            <tappz_basket translate="title" module="tappz">
+                <title>Tappz Adapter Basket API</title>
+                <model>tappz/basket_api</model>
+                <methods>
+                    <get translate="title" module="tappz">
+                        <method>get</method>
+                    </get>
+                    <merge translate="title" module="tappz">
+                        <method>merge</method>
+                    </merge>
+                    <updateItems translate="title" module="tappz">
+                        <method>updateItems</method>
+                    </updateItems>
+                    <setAddress translate="title" module="tappz">
+                        <method>setAddress</method>
+                    </setAddress>
+                    <setGiftWrapping translate="title" module="tappz">
+                        <method>setGiftWrapping</method>
+                    </setGiftWrapping>
+                    <useDiscount translate="title" module="tappz">
+                        <method>useDiscount</method>
+                    </useDiscount>
+                    <deleteDiscount translate="title" module="tappz">
+                        <method>deleteDiscount</method>
+                    </deleteDiscount>
+                    <useGiftCheques translate="title" module="tappz">
+                        <method>useGiftCheques</method>
+                    </useGiftCheques>
+                    <deleteGiftCheques translate="title" module="tappz">
+                        <method>deleteGiftCheques</method>
+                    </deleteGiftCheques>
+                    <useUserPoints translate="title" module="tappz">
+                        <method>useUserPoints</method>
+                    </useUserPoints>
+                    <selectPaymentMethod translate="title" module="tappz">
+                        <method>selectPaymentMethod</method>
+                    </selectPaymentMethod>
+                    <getContract translate="title" module="tappz">
+                        <method>getContract</method>
+                    </getContract>
+                    <purchaseCreditCard translate="title" module="tappz">
+                        <method>purchaseCreditCard</method>
+                    </purchaseCreditCard>
+                    <purchaseMoneyOrder translate="title" module="tappz">
+                        <method>purchaseMoneyOrder</method>
+                    </purchaseMoneyOrder>
+                    <purchaseCashOnDelivery translate="title" module="tappz">
+                        <method>purchaseCashOnDelivery</method>
+                    </purchaseCashOnDelivery>
+                    <purchaseWithPayPal translate="title" module="tappz">
+                        <method>purchaseWithPayPal</method>
+                    </purchaseWithPayPal>
+                    <purchaseWithApplePay translate="title" module="tappz">
+                        <method>purchaseWithApplePay</method>
+                    </purchaseWithApplePay>
+
+                    <getTaksitSecenekleri translate="title" module="tappz">
+                        <method>getTaksitSecenekleri</method>
+                    </getTaksitSecenekleri>
+                    <getSupplyDate translate="title" module="tappz">
+                        <method>getSupplyDate</method>
+                    </getSupplyDate>
+                </methods>
+                <faults module="tappz">
+                    <project_not_exists>
+                        <code>101</code>
+                        <message>Requested project does not exist.</message>
+                    </project_not_exists>
+                    <invalid_data>
+                        <code>102</code>
+                        <message>Provided data is invalid.</message>
+                    </invalid_data>
+                    <save_error>
+                        <code>103</code>
+                        <message>Error while saving project. Details in error message.</message>
+                    </save_error>
+                    <remove_error>
+                        <code>104</code>
+                        <message>Error while removing project. Details in error message.</message>
+                    </remove_error>
+                </faults>
+            </tappz_basket>
+            <tappz_catalog translate="title" module="tappz">
+                <title>Tappz Adapter Catalog API</title>
+                <model>tappz/catalog_api</model>
+                <methods>
+                    <getFrontPage translate="title" module="tappz">
+                        <title>Gets front page banner and product lists</title>
+                    </getFrontPage>
+                    <getCategories translate="title" module="tappz">
+                        <title>Get root category list</title>
+                    </getCategories>
+                    <getCategory translate="title" module="tappz">
+                        <title>Get a category with children</title>
+                    </getCategory>
+                    <getProductList translate="title" module="tappz">
+                        <title>Get product list</title>
+                    </getProductList>
+                    <getProduct translate="title" module="tappz">
+                        <title>Get product details</title>
+                    </getProduct>
+                    <getRelatedProducts translate="title" module="tappz">
+                        <title>Get related products</title>
+                    </getRelatedProducts>
+                    <getChildProductId translate="title" module="tappz">
+                        <title>Get child product id of a configurable product</title>
+                    </getChildProductId>
+                </methods>
+                <faults module="tmoblabs_tappz">
+                    <project_not_exists>
+                        <code>101</code>
+                        <message>Requested project does not exist.</message>
+                    </project_not_exists>
+                    <invalid_data>
+                        <code>102</code>
+                        <message>Provided data is invalid.</message>
+                    </invalid_data>
+                    <save_error>
+                        <code>103</code>
+                        <message>Error while saving project. Details in error message.</message>
+                    </save_error>
+                    <remove_error>
+                        <code>104</code>
+                        <message>Error while removing project. Details in error message.</message>
+                    </remove_error>
+                </faults>
+            </tappz_catalog>
+            <tappz_customer>
+                <title>Tappz Adapter Customer API</title>
+                <model>tappz/customer_api</model>
+                <methods>
+                    <info translate="title" module="tappz">
+                        <title>Retrieve Customer</title>
+                    </info>
+                    <login translate="title" module="tappz">
+                        <title>Login a Customer</title>
+                    </login>
+                    <facebookLogin translate="title" module="tappz">
+                        <title>Login with Facebook</title>
+                    </facebookLogin>
+                    <register translate="title" module="tappz">
+                        <title>Register a Customer</title>
+                    </register>
+                    <update translate="title" module="tappz">
+                        <title>Update Customer Info</title>
+                    </update>
+                    <lostPassword translate="title" module="tappz">
+                        <title>Send Password Reset E-mail</title>
+                    </lostPassword>
+                    <getUserAgreement translate="title" module="tappz">
+                        <title>Retrieve User Agreement</title>
+                    </getUserAgreement>
+                </methods>
+                <faults module="tappz">
+                    <project_not_exists>
+                        <code>101</code>
+                        <message>Requested project does not exist.</message>
+                    </project_not_exists>
+                    <invalid_data>
+                        <code>102</code>
+                        <message>Provided data is invalid.</message>
+                    </invalid_data>
+                    <save_error>
+                        <code>103</code>
+                        <message>Error while saving project. Details in error message.</message>
+                    </save_error>
+                    <remove_error>
+                        <code>104</code>
+                        <message>Error while removing project. Details in error message.</message>
+                    </remove_error>
+                </faults>
+            </tappz_customer>
+            <tappz_customer_address>
+                <title>Tappz Adapter Customer Address API</title>
+                <model>tappz/customer_address_api</model>
+                <methods>
+                    <getList translate="title" module="tappz">
+                        <title>Get Customer Address List</title>
+                    </getList>
+                    <create translate="title" module="tappz">
+                        <title>Create Customer Address</title>
+                    </create>
+                    <update translate="title" module="tappz">
+                        <title>Update Customer Address</title>
+                    </update>
+                    <delete translate="title" module="tappz">
+                        <title>Delete Customer Address</title>
+                    </delete>
+                    <countryList translate="title" module="tappz">
+                        <title>Get Country List</title>
+                    </countryList>
+                    <stateList translate="title" module="tappz">
+                        <title>Get State List</title>
+                    </stateList>
+                    <cityList translate="title" module="tappz">
+                        <title>Get City List</title>
+                    </cityList>
+                    <districtList translate="title" module="tappz">
+                        <title>Get District List</title>
+                    </districtList>
+                    <townList translate="title" module="tappz">
+                        <title>Get Town List</title>
+                    </townList>
+                </methods>
+                <faults module="tappz">
+                    <project_not_exists>
+                        <code>101</code>
+                        <message>Requested project does not exist.</message>
+                    </project_not_exists>
+                    <invalid_data>
+                        <code>102</code>
+                        <message>Provided data is invalid.</message>
+                    </invalid_data>
+                    <save_error>
+                        <code>103</code>
+                        <message>Error while saving project. Details in error message.</message>
+                    </save_error>
+                    <remove_error>
+                        <code>104</code>
+                        <message>Error while removing project. Details in error message.</message>
+                    </remove_error>
+                </faults>
+            </tappz_customer_address>
+            <tappz_customer_order>
+                <title>Tappz Adapter Customer Order API</title>
+                <model>tappz/customer_order_api</model>
+                <methods>
+                    <getList translate="title" module="tappz">
+                        <title>Get Customer Order List</title>
+                    </getList>
+                    <info translate="title" module="tappz">
+                        <title>Get Order Info</title>
+                    </info>
+                </methods>
+                <faults module="tappz">
+                    <project_not_exists>
+                        <code>101</code>
+                        <message>Requested project does not exist.</message>
+                    </project_not_exists>
+                    <invalid_data>
+                        <code>102</code>
+                        <message>Provided data is invalid.</message>
+                    </invalid_data>
+                    <save_error>
+                        <code>103</code>
+                        <message>Error while saving project. Details in error message.</message>
+                    </save_error>
+                    <remove_error>
+                        <code>104</code>
+                        <message>Error while removing project. Details in error message.</message>
+                    </remove_error>
+                </faults>
+            </tappz_customer_order>
+        </resources>
+        <resources_alias>
+            <basket>tappz_basket</basket>
+            <catalog>tappz_catalog</catalog>
+            <customer>tappz_customer</customer>
+            <customer_address>tappz_customer_address</customer_address>
+            <customer_order>tappz_customer_order</customer_order>
+        </resources_alias>
+        <v2>
+            <resources_function_prefix>
+                <basket>tappzBasket</basket>
+                <catalog>tappzCatalog</catalog>
+                <customer>tappzCustomer</customer>
+                <customer_address>tappzCustomerAddress</customer_address>
+                <customer_order>tappzCustomerOrder</customer_order>
+            </resources_function_prefix>
+        </v2>
+    </api>
+</config>

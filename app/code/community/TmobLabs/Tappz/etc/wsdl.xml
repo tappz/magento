@@ -1,0 +1,1650 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns:typens="urn:{{var wsdl.name}}" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             name="{{var wsdl.name}}" targetNamespace="urn:{{var wsdl.name}}"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://schemas.xmlsoap.org/wsdl/ ">
+    <types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:Magento">
+            <import namespace="http://schemas.xmlsoap.org/soap/encoding/"
+                    schemaLocation="http://schemas.xmlsoap.org/soap/encoding/"/>
+
+
+            <complexType name="taksits">
+                <all>
+                    <element name="bankOption" type="xsd:string"/>
+                    <element name="totalPrice" type="xsd:string"/>
+                </all>
+            </complexType>
+
+            <complexType name="taksitList">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:taksits[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
+
+            <complexType name="taksitServiceDetailsList">
+                <all>
+                    <element name="bankName" type="xsd:string"/>
+                    <element name="bankValues" type="typens:taksitList"/>
+                </all>
+            </complexType>
+
+            <complexType name="taksitServiceList">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:taksitServiceDetailsList[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
+
+            <complexType name="taksitDets">
+                <all>
+                    <element name="purchaseOptions" type="typens:taksitServiceList"/>
+                </all>
+            </complexType>
+
+            <complexType name="basketContract">
+                <all>
+                    <element name="termOfUse" type="xsd:string"/>
+                    <element name="salesContact" type="xsd:string"/>
+                </all>
+            </complexType>
+
+            <complexType name="creditCardInfo">
+                <all>
+                    <element name="owner" type="xsd:string"/>
+                    <element name="number" type="xsd:string"/>
+                    <element name="month" type="xsd:string"/>
+                    <element name="year" type="xsd:string"/>
+                    <element name="cvv" type="xsd:string"/>
+                    <element name="type" type="xsd:string"/>
+                </all>
+            </complexType>
+
+            <complexType name="basketUpdate">
+                <all>
+                    <element name="productId" type="xsd:string"/>
+                    <element name="qty" type="xsd:string"/>
+                </all>
+            </complexType>
+
+            <complexType name="basketUpdateList">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:basketUpdate[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
+
+            <complexType name="installment">
+                <all>
+                    <element name="installmentNumber" type="xsd:string"/>
+                    <element name="installmentPayment" type="xsd:string"/>
+                    <element name="total" type="xsd:string"/>
+                </all>
+            </complexType>
+
+            <complexType name="installmentList">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:installment[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
+
+            <complexType name="creditCard">
+                <all>
+                    <element name="image" type="xsd:string"/>
+                    <element name="displayName" type="xsd:string"/>
+                    <element name="type" type="xsd:string"/>
+                    <element name="installmentNumber" type="xsd:string"/>
+                    <element name="installments" type="typens:installmentList"/>
+                </all>
+            </complexType>
+
+            <complexType name="creditCardList">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:creditCard[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
+
+            <complexType name="moneyTransfer">
+                <all>
+                    <element name="id" type="xsd:string"/>
+                    <element name="displayName" type="xsd:string"/>
+                    <element name="code" type="xsd:string"/>
+                    <element name="branch" type="xsd:string"/>
+                    <element name="accountNumber" type="xsd:string"/>
+                    <element name="iban" type="xsd:string"/>
+                    <element name="imageUrl" type="xsd:string"/>
+                </all>
+            </complexType>
+
+            <complexType name="moneyTransferList">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:moneyTransfer[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
+
+            <complexType name="paypal">
+                <all>
+                    <element name="clientId" type="xsd:string"/>
+                    <element name="displayName" type="xsd:string"/>
+                    <element name="isSandbox" type="xsd:boolean"/>
+                </all>
+            </complexType>
+
+            <complexType name="paymentOptions">
+                <all>
+                    <element name="creditCards" type="typens:creditCardList"/>
+                    <element name="moneyTransfers" type="typens:moneyTransferList"/>
+                    <element name="cashOnDelivery" type="typens:cashOnDelivery"/>
+                    <element name="paypal" type="typens:paypal"/>
+                </all>
+            </complexType>
+
+            <complexType name="discount">
+                <all>
+                    <element name="displayName" type="xsd:string"/>
+                    <element name="discountTotal" type="xsd:string"/>
+                    <element name="promoCode" type="xsd:string"/>
+                </all>
+            </complexType>
+
+            <complexType name="discountList">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:discount[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
+
+            <complexType name="errorList">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:string[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
+
+            <complexType name="shippingMethodList">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:shippingMethod[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
+
+            <complexType name="giftWrapping">
+                <all>
+                    <element name="isSelected" type="xsd:boolean"/>
+                    <element name="giftWrappingFee" type="xsd:string"/>
+                    <element name="maxCharackter" type="xsd:string"/>
+                    <element name="message" type="xsd:string"/>
+                </all>
+            </complexType>
+
+            <complexType name="basket">
+                <all>
+                    <element name="id" type="xsd:string"/>
+                    <element name="lines" type="typens:lineList"/>
+                    <element name="currency" type="xsd:string"/>
+                    <element name="discounts" type="typens:discountList"/>
+                    <element name="delivery" type="typens:delivery"/>
+                    <element name="payment" type="typens:payment"/>
+                    <element name="itemsPriceTotal" type="xsd:string"/>
+                    <element name="discountTotal" type="xsd:string"/>
+                    <element name="subTotal" type="xsd:string"/>
+                    <element name="beforeTaxTotal" type="xsd:string"/>
+                    <element name="taxTotal" type="xsd:string"/>
+                    <element name="shippingTotal" type="xsd:string"/>
+                    <element name="total" type="xsd:string"/>
+                    <element name="paymentOptions" type="typens:paymentOptions"/>
+                    <element name="shippingMethods" type="typens:shippingMethodList"/>
+                    <element name="errors" type="typens:errorList"/>
+                    <element name="giftCheques" type="typens:giftChequeList"/>
+                    <element name="spentGiftChequeTotal" type="xsd:string"/>
+                    <element name="usedPoints" type="xsd:string"/>
+                    <element name="usedPointsAmount" type="xsd:string"/>
+                    <element name="rewardPoints" type="xsd:string"/>
+                    <element name="paymentFee" type="xsd:string"/>
+                    <element name="estimatedSupplyDate" type="xsd:string"/>
+                    <element name="isGiftWrappingEnabled" type="xsd:boolean"/>
+                    <element name="giftWrapping" type="typens:giftWrapping"/>
+                </all>
+            </complexType>
+
+            <complexType name="line">
+                <all>
+                    <element name="productId" type="xsd:string"/>
+                    <element name="product" type="typens:product"/>
+                    <element name="quantity" type="xsd:string"/>
+                    <element name="price" type="xsd:string"/>
+                    <element name="priceTotal" type="xsd:string"/>
+                    <element name="averageDeliveryDays" type="xsd:string"/>
+                    <element name="variants" type="typens:groupList"/>
+                </all>
+            </complexType>
+
+            <complexType name="lineList">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:line[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
+
+            <complexType name="shippingMethod">
+                <all>
+                    <element name="id" type="xsd:string" minOccurs="0"/>
+                    <element name="displayName" type="xsd:string" minOccurs="0"/>
+                    <element name="trackingAddress" type="xsd:string" minOccurs="0"/>
+                    <element name="price" type="xsd:string" minOccurs="0"/>
+                    <element name="priceForYou" type="xsd:string" minOccurs="0"/>
+                    <element name="shippingMethodType" type="xsd:string" minOccurs="0"/>
+                    <element name="imageUrl" type="xsd:string" minOccurs="0"/>
+                </all>
+            </complexType>
+
+            <complexType name="delivery">
+                <all>
+                    <element name="shippingAddress" type="typens:address" minOccurs="0"/>
+                    <element name="billingAddress" type="typens:address" minOccurs="0"/>
+                    <element name="shippingMethod" type="typens:shippingMethod" minOccurs="0"/>
+                </all>
+            </complexType>
+
+            <complexType name="cashOnDelivery">
+                <all>
+                    <element name="type" type="xsd:string" minOccurs="0"/>
+                    <element name="displayName" type="xsd:string" minOccurs="0"/>
+                    <element name="additionalFee" type="xsd:string" minOccurs="0"/>
+                    <element name="description" type="xsd:string" minOccurs="0"/>
+                    <element name="isSMSVerification" type="xsd:boolean" minOccurs="0"/>
+                    <element name="SMSCode" type="xsd:string" minOccurs="0"/>
+                    <element name="PhoneNumber" type="xsd:string" minOccurs="0"/>
+                </all>
+            </complexType>
+
+            <complexType name="payment">
+                <all>
+                    <element name="methodType" type="xsd:string" minOccurs="0"/>
+                    <element name="type" type="xsd:string" minOccurs="0"/>
+                    <element name="displayName" type="xsd:string" minOccurs="0"/>
+                    <element name="bankCode" type="xsd:string" minOccurs="0"/>
+                    <element name="installment" type="xsd:string" minOccurs="0"/>
+                    <element name="accountNumber" type="xsd:string" minOccurs="0"/>
+                    <element name="branch" type="xsd:string" minOccurs="0"/>
+                    <element name="iban" type="xsd:string" minOccurs="0"/>
+                    <element name="cashOnDelivery" type="typens:cashOnDelivery" minOccurs="0"/>
+                    <element name="creditCard" type="typens:creditCardInfo"/>
+                </all>
+            </complexType>
+
+            <complexType name="order">
+                <all>
+                    <element name="id" type="xsd:string" minOccurs="0"/>
+                    <element name="orderDate" type="xsd:string" minOccurs="0"/>
+                    <element name="shippingStatus" type="xsd:string" minOccurs="0"/>
+                    <element name="paymentStatus" type="xsd:string" minOccurs="0"/>
+                    <element name="ipAddress" type="xsd:string" minOccurs="0"/>
+                    <element name="itemsPriceTotal" type="xsd:string" minOccurs="0"/>
+                    <element name="discountTotal" type="xsd:string" minOccurs="0"/>
+                    <element name="subTotal" type="xsd:string" minOccurs="0"/>
+                    <element name="shippingTotal" type="xsd:string" minOccurs="0"/>
+                    <element name="total" type="xsd:string" minOccurs="0"/>
+                    <element name="delivery" type="typens:delivery" minOccurs="0"/>
+                    <element name="payment" type="typens:payment" minOccurs="0"/>
+                    <element name="lines" type="typens:lineList" minOccurs="0"/>
+                    <element name="currency" type="string"/>
+                </all>
+            </complexType>
+
+            <complexType name="orderList">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:order[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
+
+            <complexType name="location">
+                <all>
+                    <element name="code" type="xsd:string"/>
+                    <element name="name" type="xsd:string"/>
+                </all>
+            </complexType>
+
+            <complexType name="locationList">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:location[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
+
+            <complexType name="giftCheque">
+                <all>
+                    <element name="chequeNumber" type="xsd:string"/>
+                    <element name="expireDate" type="xsd:string"/>
+                    <element name="amount" type="xsd:string"/>
+                    <element name="code" type="xsd:string"/>
+                    <element name="status" type="xsd:string"/>
+                    <element name="type" type="xsd:string"/>
+                    <element name="activationDate" type="xsd:string"/>
+                    <element name="legalText" type="xsd:string"/>
+                </all>
+            </complexType>
+
+            <complexType name="giftChequeList">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:giftCheque[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
+
+            <complexType name="address">
+                <all>
+                    <element name="id" type="xsd:string"/>
+                    <element name="addressName" type="xsd:string"/>
+                    <element name="name" type="xsd:string"/>
+                    <element name="surname" type="xsd:string"/>
+                    <element name="email" type="xsd:string"/>
+                    <element name="addressLine" type="xsd:string"/>
+                    <element name="country" type="xsd:string"/>
+                    <element name="countryCode" type="xsd:string"/>
+                    <element name="state" type="xsd:string"/>
+                    <element name="stateCode" type="xsd:string"/>
+                    <element name="city" type="xsd:string"/>
+                    <element name="cityCode" type="xsd:string"/>
+                    <element name="district" type="xsd:string"/>
+                    <element name="districtCode" type="xsd:string"/>
+                    <element name="town" type="xsd:string"/>
+                    <element name="townCode" type="xsd:string"/>
+                    <element name="corporate" type="xsd:string"/>
+                    <element name="companyTitle" type="xsd:string"/>
+                    <element name="taxDepartment" type="xsd:string"/>
+                    <element name="taxNo" type="xsd:string"/>
+                    <element name="phoneNumber" type="xsd:string"/>
+                    <element name="identityNo" type="xsd:string"/>
+                    <element name="zipCode" type="xsd:string"/>
+                </all>
+            </complexType>
+
+            <complexType name="addressList">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:address[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
+
+            <complexType name="customer">
+                <all>
+                    <element name="customerId" type="xsd:string"/>
+                    <element name="fullName" type="xsd:string"/>
+                    <element name="firstName" type="xsd:string"/>
+                    <element name="lastName" type="xsd:string"/>
+                    <element name="gender" type="xsd:string"/>
+                    <element name="isSubscribed" type="xsd:boolean"/>
+                    <element name="isAccepted" type="xsd:boolean"/>
+                    <element name="email" type="xsd:string"/>
+                    <element name="password" type="xsd:string"/>
+                    <element name="phone" type="xsd:string"/>
+                    <element name="birthDate" type="xsd:string"/>
+                    <element name="points" type="xsd:integer"/>
+                    <element name="addresses" type="typens:addressList"/>
+                    <element name="giftCheques" type="typens:giftChequeList"/>
+                </all>
+            </complexType>
+
+            <complexType name="pictures">
+                <all>
+                    <element name="url" type="xsd:string"/>
+                </all>
+            </complexType>
+
+            <complexType name="pictureList">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:pictures[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
+
+            <complexType name="feature">
+                <all>
+                    <element name="id" type="xsd:string"/>
+                    <element name="name" type="xsd:string"/>
+                </all>
+            </complexType>
+
+            <complexType name="featureList">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:feature[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
+
+            <complexType name="group">
+                <all>
+                    <element name="id" type="xsd:string"/>
+                    <element name="name" type="xsd:string"/>
+                    <element name="selected" type="xsd:string"/>
+                    <element name="values" type="typens:featureList"/>
+                </all>
+            </complexType>
+
+            <complexType name="groupList">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:group[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
+
+            <complexType name="price">
+                <all>
+                    <element name="amount" type="xsd:double"/>
+                    <element name="amountDefaultCurrency" type="xsd:string"/>
+                    <element name="currency" type="xsd:string"/>
+                </all>
+            </complexType>
+
+            <complexType name="product">
+                <all>
+                    <element name="id" type="xsd:string"/>
+                    <element name="inStock" type="xsd:boolean"/>
+                    <element name="isShipmentFree" type="xsd:boolean"/>
+                    <element name="listPrice" type="typens:price"/>
+                    <element name="picture" type="xsd:string"/>
+                    <element name="pictures" type="typens:pictureList"/>
+                    <element name="productDetailUrl" type="xsd:string"/>
+                    <element name="additionalDetail" type="xsd:string"/>
+                    <element name="productName" type="xsd:string"/>
+                    <element name="productUrl" type="xsd:string"/>
+                    <element name="shipmentInformation" type="xsd:string"/>
+                    <element name="strikeoutPrice" type="typens:price"/>
+                    <element name="isCampaign" type="xsd:boolean"/>
+                    <element name="headline" type="xsd:string"/>
+                    <!--<element name="feature" type="typens:groupList"/>-->
+                    <element name="actions" type="typens:featureList"/>
+                    <!--<element name="creditCardInstallments" type="typens:featureList"/>-->
+                    <element name="variants" type="typens:groupList"/>
+                </all>
+            </complexType>
+
+            <complexType name="productList">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:product[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
+
+            <complexType name="searchResult">
+                <all>
+                    <element name="total" type="xsd:integer"/>
+                    <element name="filters" type="typens:groupList"/>
+                    <element name="sortList" type="typens:featureList"/>
+                    <element name="products" type="typens:productList"/>
+                </all>
+            </complexType>
+
+            <complexType name="productGroup">
+                <all>
+                    <element name="partName" type="xsd:string"/>
+                    <element name="products" type="typens:productList"/>
+                </all>
+            </complexType>
+
+            <complexType name="productGroupList">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:productGroup[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
+
+            <complexType name="ad">
+                <all>
+                    <element name="name" type="xsd:string"/>
+                    <element name="image" type="xsd:string"/>
+                    <element name="type" type="xsd:string"/>
+                    <element name="value" type="xsd:string"/>
+                </all>
+            </complexType>
+
+            <complexType name="adList">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:ad[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
+
+            <complexType name="frontPage">
+                <all>
+                    <element name="ads" type="typens:adList"/>
+                    <element name="groups" type="typens:productGroupList"/>
+                </all>
+            </complexType>
+
+            <complexType name="category">
+                <all>
+                    <element name="id" type="xsd:string"/>
+                    <element name="name" type="xsd:string"/>
+                    <element name="isRoot" type="xsd:boolean"/>
+                    <element name="isLeaf" type="xsd:boolean"/>
+                    <element name="parentCategoryId" type="xsd:string"/>
+                    <element name="children" type="typens:categoryList"/>
+                </all>
+            </complexType>
+
+            <complexType name="categoryList">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:category[]"/>
+                    </restriction>
+                </complexContent>
+            </complexType>
+
+        </schema>
+    </types>
+
+
+    <!--catalog -->
+    <message name="tappzCatalogGetFrontPageRequest">
+        <part name="sessionId" type="xsd:string"/>
+    </message>
+    <message name="tappzCatalogGetFrontPageResponse">
+        <part name="frontPage" type="typens:frontPage"/>
+    </message>
+
+    <message name="tappzCatalogGetCategoriesRequest">
+        <part name="sessionId" type="xsd:string"/>
+    </message>
+    <message name="tappzCatalogGetCategoriesResponse">
+        <part name="category" type="typens:categoryList"/>
+    </message>
+
+    <message name="tappzCatalogGetCategoryRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="categoryId" type="xsd:string"/>
+    </message>
+    <message name="tappzCatalogGetCategoryResponse">
+        <part name="category" type="typens:category"/>
+    </message>
+
+    <message name="tappzCatalogGetProductListRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="phrase" type="xsd:string"/>
+        <part name="categoryId" type="xsd:string"/>
+        <part name="pageNumber" type="xsd:integer"/>
+        <part name="pageSize" type="xsd:integer"/>
+        <part name="filterQuery" type="xsd:string"/>
+        <part name="sort" type="xsd:string"/>
+    </message>
+    <message name="tappzCatalogGetProductListResponse">
+        <part name="category" type="typens:searchResult"/>
+    </message>
+
+    <message name="tappzCatalogGetProductRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="productId" type="xsd:string"/>
+    </message>
+    <message name="tappzCatalogGetProductResponse">
+        <part name="product" type="typens:product"/>
+    </message>
+
+    <message name="tappzCatalogGetRelatedProductsRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="productId" type="xsd:string"/>
+    </message>
+    <message name="tappzCatalogGetRelatedProductsResponse">
+        <part name="productList" type="typens:productList"/>
+    </message>
+
+    <message name="tappzCatalogGetChildProductIdRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="parentProductId" type="xsd:string"/>
+        <part name="variant" type="typens:groupList"/>
+    </message>
+    <message name="tappzCatalogGetChildProductIdResponse">
+        <part name="childProductId" type="xsd:string"/>
+    </message>
+    <!--catalog -->
+
+    <!--customer-->
+    <message name="tappzCustomerInfoRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="customerId" type="xsd:string"/>
+    </message>
+    <message name="tappzCustomerInfoResponse">
+        <part name="customer" type="typens:customer"/>
+    </message>
+
+    <message name="tappzCustomerLoginRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="username" type="xsd:string"/>
+        <part name="password" type="xsd:string"/>
+    </message>
+    <message name="tappzCustomerLoginResponse">
+        <part name="customer" type="typens:customer"/>
+    </message>
+
+    <message name="tappzCustomerFacebookLoginRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="facebookAccessToken" type="xsd:string"/>
+        <part name="facebookUserId" type="xsd:string"/>
+    </message>
+    <message name="tappzCustomerFacebookLoginResponse">
+        <part name="customer" type="typens:customer"/>
+    </message>
+
+    <message name="tappzCustomerRegisterRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="customer" type="typens:customer"/>
+    </message>
+    <message name="tappzCustomerRegisterResponse">
+        <part name="customer" type="typens:customer"/>
+    </message>
+
+    <message name="tappzCustomerUpdateRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="customer" type="typens:customer"/>
+    </message>
+    <message name="tappzCustomerUpdateResponse">
+        <part name="customer" type="typens:customer"/>
+    </message>
+
+    <message name="tappzCustomerLostPasswordRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="email" type="xsd:string"/>
+    </message>
+    <message name="tappzCustomerLostPasswordResponse">
+        <part name="result" type="xsd:string"/>
+    </message>
+
+    <message name="tappzCustomerGetUserAgreementRequest">
+        <part name="sessionId" type="xsd:string"/>
+    </message>
+    <message name="tappzCustomerGetUserAgreementResponse">
+        <part name="agreement" type="xsd:string"/>
+    </message>
+    <!--customer-->
+
+    <!--customer_address-->
+    <message name="tappzCustomerAddressGetListRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="customerId" type="xsd:string"/>
+    </message>
+    <message name="tappzCustomerAddressGetListResponse">
+        <part name="list" type="typens:addressList"/>
+    </message>
+
+    <message name="tappzCustomerAddressCreateRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="customerId" type="xsd:string"/>
+        <part name="address" type="typens:address"/>
+    </message>
+    <message name="tappzCustomerAddressCreateResponse">
+        <part name="address" type="typens:address"/>
+    </message>
+
+    <message name="tappzCustomerAddressUpdateRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="address" type="typens:address"/>
+    </message>
+    <message name="tappzCustomerAddressUpdateResponse">
+        <part name="address" type="typens:address"/>
+    </message>
+
+    <message name="tappzCustomerAddressDeleteRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="address" type="typens:address"/>
+    </message>
+    <message name="tappzCustomerAddressDeleteResponse">
+        <part name="addressId" type="xsd:string"/>
+    </message>
+
+    <message name="tappzCustomerAddressCountryListRequest">
+        <part name="sessionId" type="xsd:string"/>
+    </message>
+    <message name="tappzCustomerAddressCountryListResponse">
+        <part name="list" type="typens:locationList"/>
+    </message>
+
+    <message name="tappzCustomerAddressStateListRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="countryCode" type="xsd:string"/>
+    </message>
+    <message name="tappzCustomerAddressStateListResponse">
+        <part name="list" type="typens:locationList"/>
+    </message>
+
+    <message name="tappzCustomerAddressCityListRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="stateCode" type="xsd:string"/>
+    </message>
+    <message name="tappzCustomerAddressCityListResponse">
+        <part name="list" type="typens:locationList"/>
+    </message>
+
+    <message name="tappzCustomerAddressDistrictListRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="districtCode" type="xsd:string"/>
+    </message>
+    <message name="tappzCustomerAddressDistrictListResponse">
+        <part name="list" type="typens:locationList"/>
+    </message>
+
+    <message name="tappzCustomerAddressTownListRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="districtCode" type="xsd:string"/>
+    </message>
+    <message name="tappzCustomerAddressTownListResponse">
+        <part name="list" type="typens:locationList"/>
+    </message>
+    <!--customer_address-->
+
+    <!--customer_order-->
+    <message name="tappzCustomerOrderGetListRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="customerId" type="xsd:string"/>
+    </message>
+    <message name="tappzCustomerOrderGetListResponse">
+        <part name="list" type="typens:orderList"/>
+    </message>
+
+    <message name="tappzCustomerOrderInfoRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="orderId" type="xsd:string"/>
+    </message>
+    <message name="tappzCustomerOrderInfoResponse">
+        <part name="order" type="typens:order"/>
+    </message>
+    <!--customer_order-->
+
+    <!--basket-->
+    <message name="tappzBasketGetRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="quoteId" type="xsd:string"/>
+        <part name="customerId" type="xsd:string"/>
+    </message>
+    <message name="tappzBasketGetResponse">
+        <part name="basket" type="typens:basket"/>
+    </message>
+
+    <message name="tappzBasketMergeRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="anonymousQuoteId" type="xsd:string"/>
+        <part name="customerId" type="xsd:string"/>
+    </message>
+    <message name="tappzBasketMergeResponse">
+        <part name="basket" type="typens:basket"/>
+    </message>
+
+    <message name="tappzBasketUpdateItemsRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="quoteId" type="xsd:string"/>
+        <part name="update" type="typens:basketUpdateList"/>
+    </message>
+    <message name="tappzBasketUpdateItemsResponse">
+        <part name="basket" type="typens:basket"/>
+    </message>
+
+    <message name="tappzBasketSetAddressRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="quoteId" type="xsd:string"/>
+        <part name="shippingAddressId" type="xsd:string"/>
+        <part name="billingAddressId" type="xsd:string"/>
+        <part name="shippingMethodId" type="xsd:string"/>
+    </message>
+    <message name="tappzBasketSetAddressResponse">
+        <part name="basket" type="typens:basket"/>
+    </message>
+
+    <message name="tappzBasketSetGiftWrappingRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="quoteId" type="xsd:string"/>
+        <part name="isSelected" type="xsd:boolean"/>
+        <part name="message" type="xsd:string"/>
+    </message>
+    <message name="tappzBasketSetGiftWrappingResponse">
+        <part name="basket" type="typens:basket"/>
+    </message>
+
+    <message name="tappzBasketUseDiscountRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="quoteId" type="xsd:string"/>
+        <part name="promoCode" type="xsd:string"/>
+    </message>
+    <message name="tappzBasketUseDiscountResponse">
+        <part name="basket" type="typens:basket"/>
+    </message>
+
+    <message name="tappzBasketDeleteDiscountRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="quoteId" type="xsd:string"/>
+    </message>
+    <message name="tappzBasketDeleteDiscountResponse">
+        <part name="basket" type="typens:basket"/>
+    </message>
+
+    <message name="tappzBasketUseGiftChequesRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="quoteId" type="xsd:string"/>
+        <part name="code" type="xsd:string"/>
+    </message>
+    <message name="tappzBasketUseGiftChequesResponse">
+        <part name="basket" type="typens:basket"/>
+    </message>
+
+    <message name="tappzBasketDeleteGiftChequesRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="quoteId" type="xsd:string"/>
+    </message>
+    <message name="tappzBasketDeleteGiftChequesResponse">
+        <part name="basket" type="typens:basket"/>
+    </message>
+
+    <message name="tappzBasketUseUserPointsRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="quoteId" type="xsd:string"/>
+        <part name="points" type="xsd:string"/>
+    </message>
+    <message name="tappzBasketUseUserPointsResponse">
+        <part name="basket" type="typens:basket"/>
+    </message>
+
+    <message name="tappzBasketSelectPaymentMethodRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="quoteId" type="xsd:string"/>
+        <part name="payment" type="typens:payment"/>
+    </message>
+    <message name="tappzBasketSelectPaymentMethodResponse">
+        <part name="basket" type="typens:basket"/>
+    </message>
+
+    <message name="tappzBasketGetContractRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="quoteId" type="xsd:string"/>
+    </message>
+    <message name="tappzBasketGetContractResponse">
+        <part name="contract" type="typens:basketContract"/>
+    </message>
+
+    <message name="tappzBasketPurchaseCreditCardRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="quoteId" type="xsd:string"/>
+    </message>
+    <message name="tappzBasketPurchaseCreditCardResponse">
+        <part name="order" type="typens:order"/>
+    </message>
+
+    <message name="tappzBasketPurchaseMoneyOrderRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="quoteId" type="xsd:string"/>
+        <part name="moneyOrderType" type="xsd:string"/>
+    </message>
+    <message name="tappzBasketPurchaseMoneyOrderResponse">
+        <part name="order" type="typens:order"/>
+    </message>
+
+    <message name="tappzBasketPurchaseCashOnDeliveryRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="quoteId" type="xsd:string"/>
+        <part name="cashOnDelivery" type="typens:cashOnDelivery"/>
+    </message>
+    <message name="tappzBasketPurchaseCashOnDeliveryResponse">
+        <part name="order" type="typens:order"/>
+    </message>
+
+    <message name="tappzBasketPurchaseWithPayPalRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="quoteId" type="xsd:string"/>
+        <part name="transactionId" type="xsd:string"/>
+    </message>
+    <message name="tappzBasketPurchaseWithPayPalResponse">
+        <part name="order" type="typens:order"/>
+    </message>
+
+    <message name="tappzBasketPurchaseWithApplePayRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="quoteId" type="xsd:string"/>
+        <part name="tokenId" type="xsd:string"/>
+    </message>
+    <message name="tappzBasketPurchaseWithApplePayResponse">
+        <part name="order" type="typens:order"/>
+    </message>
+    <!--basket-->
+
+    <portType name="{{var wsdl.handler}}PortType">
+
+        <!-- catalog -->
+        <operation name="tappzCatalogGetFrontPage">
+            <documentation>Get front page banner and product lists</documentation>
+            <input message="typens:tappzCatalogGetFrontPageRequest"/>
+            <output message="typens:tappzCatalogGetFrontPageResponse"/>
+        </operation>
+        <operation name="tappzCatalogGetCategories">
+            <documentation>Get root category list</documentation>
+            <input message="typens:tappzCatalogGetCategoriesRequest"/>
+            <output message="typens:tappzCatalogGetCategoriesResponse"/>
+        </operation>
+        <operation name="tappzCatalogGetCategory">
+            <documentation>Get a category with children</documentation>
+            <input message="typens:tappzCatalogGetCategoryRequest"/>
+            <output message="typens:tappzCatalogGetCategoryResponse"/>
+        </operation>
+        <operation name="tappzCatalogGetProductList">
+            <documentation>Get product list</documentation>
+            <input message="typens:tappzCatalogGetProductListRequest"/>
+            <output message="typens:tappzCatalogGetProductListResponse"/>
+        </operation>
+        <operation name="tappzCatalogGetProduct">
+            <documentation>Get product details</documentation>
+            <input message="typens:tappzCatalogGetProductRequest"/>
+            <output message="typens:tappzCatalogGetProductResponse"/>
+        </operation>
+        <operation name="tappzCatalogGetRelatedProducts">
+            <documentation>Get related products</documentation>
+            <input message="typens:tappzCatalogGetRelatedProductsRequest"/>
+            <output message="typens:tappzCatalogGetRelatedProductsResponse"/>
+        </operation>
+        <operation name="tappzCatalogGetChildProductId">
+            <documentation>Get related products</documentation>
+            <input message="typens:tappzCatalogGetChildProductIdRequest"/>
+            <output message="typens:tappzCatalogGetChildProductIdResponse"/>
+        </operation>
+        <!-- catalog -->
+
+        <!--customer-->
+        <operation name="tappzCustomerInfo">
+            <documentation>Retrieve customer info</documentation>
+            <input message="typens:tappzCustomerInfoRequest"/>
+            <output message="typens:tappzCustomerInfoResponse"/>
+        </operation>
+        <operation name="tappzCustomerLogin">
+            <documentation>Customer login</documentation>
+            <input message="typens:tappzCustomerLoginRequest"/>
+            <output message="typens:tappzCustomerLoginResponse"/>
+        </operation>
+        <operation name="tappzCustomerFacebookLogin">
+            <documentation>Login with Facebook</documentation>
+            <input message="typens:tappzCustomerFacebookLoginRequest"/>
+            <output message="typens:tappzCustomerFacebookLoginResponse"/>
+        </operation>
+        <operation name="tappzCustomerRegister">
+            <documentation>Customer registration</documentation>
+            <input message="typens:tappzCustomerRegisterRequest"/>
+            <output message="typens:tappzCustomerRegisterResponse"/>
+        </operation>
+        <operation name="tappzCustomerUpdate">
+            <documentation>Customer update</documentation>
+            <input message="typens:tappzCustomerUpdateRequest"/>
+            <output message="typens:tappzCustomerUpdateResponse"/>
+        </operation>
+        <operation name="tappzCustomerLostPassword">
+            <documentation>Send lost password email</documentation>
+            <input message="typens:tappzCustomerLostPasswordRequest"/>
+            <output message="typens:tappzCustomerLostPasswordResponse"/>
+        </operation>
+        <operation name="tappzCustomerGetUserAgreement">
+            <documentation>Retrieve User Agreement</documentation>
+            <input message="typens:tappzCustomerGetUserAgreementRequest"/>
+            <output message="typens:tappzCustomerGetUserAgreementResponse"/>
+        </operation>
+        <!--customer-->
+
+        <!--customer_address-->
+        <operation name="tappzCustomerAddressGetList">
+            <documentation>Retrieve User Agreement</documentation>
+            <input message="typens:tappzCustomerAddressGetListRequest"/>
+            <output message="typens:tappzCustomerAddressGetListResponse"/>
+        </operation>
+        <operation name="tappzCustomerAddressCreate">
+            <documentation>Retrieve User Agreement</documentation>
+            <input message="typens:tappzCustomerAddressCreateRequest"/>
+            <output message="typens:tappzCustomerAddressCreateResponse"/>
+        </operation>
+        <operation name="tappzCustomerAddressUpdate">
+            <documentation>Retrieve User Agreement</documentation>
+            <input message="typens:tappzCustomerAddressUpdateRequest"/>
+            <output message="typens:tappzCustomerAddressUpdateResponse"/>
+        </operation>
+        <operation name="tappzCustomerAddressDelete">
+            <documentation>Retrieve User Agreement</documentation>
+            <input message="typens:tappzCustomerAddressDeleteRequest"/>
+            <output message="typens:tappzCustomerAddressDeleteResponse"/>
+        </operation>
+        <operation name="tappzCustomerAddressCountryList">
+            <documentation>Retrieve User Agreement</documentation>
+            <input message="typens:tappzCustomerAddressCountryListRequest"/>
+            <output message="typens:tappzCustomerAddressCountryListResponse"/>
+        </operation>
+        <operation name="tappzCustomerAddressStateList">
+            <documentation>Retrieve User Agreement</documentation>
+            <input message="typens:tappzCustomerAddressStateListRequest"/>
+            <output message="typens:tappzCustomerAddressStateListResponse"/>
+        </operation>
+        <operation name="tappzCustomerAddressCityList">
+            <documentation>Retrieve User Agreement</documentation>
+            <input message="typens:tappzCustomerAddressCityListRequest"/>
+            <output message="typens:tappzCustomerAddressCityListResponse"/>
+        </operation>
+        <operation name="tappzCustomerAddressDistrictList">
+            <documentation>Retrieve User Agreement</documentation>
+            <input message="typens:tappzCustomerAddressDistrictListRequest"/>
+            <output message="typens:tappzCustomerAddressDistrictListResponse"/>
+        </operation>
+        <operation name="tappzCustomerAddressTownList">
+            <documentation>Retrieve User Agreement</documentation>
+            <input message="typens:tappzCustomerAddressTownListRequest"/>
+            <output message="typens:tappzCustomerAddressTownListResponse"/>
+        </operation>
+        <!--customer_address-->
+
+        <!--customer_order-->
+        <operation name="tappzCustomerOrderGetList">
+            <documentation>Retrieve User Agreement</documentation>
+            <input message="typens:tappzCustomerOrderGetListRequest"/>
+            <output message="typens:tappzCustomerOrderGetListResponse"/>
+        </operation>
+        <operation name="tappzCustomerOrderInfo">
+            <documentation>Retrieve User Agreement</documentation>
+            <input message="typens:tappzCustomerOrderInfoRequest"/>
+            <output message="typens:tappzCustomerOrderInfoResponse"/>
+        </operation>
+        <!--customer_order-->
+
+        <!--basket-->
+        <operation name="tappzBasketGet">
+            <documentation>Get a basket</documentation>
+            <input message="typens:tappzBasketGetRequest"/>
+            <output message="typens:tappzBasketGetResponse"/>
+        </operation>
+        <operation name="tappzBasketMerge">
+            <documentation>Retrieve User Agreement</documentation>
+            <input message="typens:tappzBasketMergeRequest"/>
+            <output message="typens:tappzBasketMergeResponse"/>
+        </operation>
+        <operation name="tappzBasketUpdateItems">
+            <documentation>Retrieve User Agreement</documentation>
+            <input message="typens:tappzBasketUpdateItemsRequest"/>
+            <output message="typens:tappzBasketUpdateItemsResponse"/>
+        </operation>
+        <operation name="tappzBasketSetAddress">
+            <documentation>Set basket shipping, billing address and shipping method</documentation>
+            <input message="typens:tappzBasketSetAddressRequest"/>
+            <output message="typens:tappzBasketSetAddressResponse"/>
+        </operation>
+        <operation name="tappzBasketSetGiftWrapping">
+            <documentation>Set basket gift wrapping properties</documentation>
+            <input message="typens:tappzBasketSetGiftWrappingRequest"/>
+            <output message="typens:tappzBasketSetGiftWrappingResponse"/>
+        </operation>
+        <operation name="tappzBasketUseDiscount">
+            <documentation>Set promo code to basket</documentation>
+            <input message="typens:tappzBasketUseDiscountRequest"/>
+            <output message="typens:tappzBasketUseDiscountResponse"/>
+        </operation>
+        <operation name="tappzBasketDeleteDiscount">
+            <documentation>Delete promo code of a basket</documentation>
+            <input message="typens:tappzBasketDeleteDiscountRequest"/>
+            <output message="typens:tappzBasketDeleteDiscountResponse"/>
+        </operation>
+        <operation name="tappzBasketUseGiftCheques">
+            <documentation>Set a gift check to a basket</documentation>
+            <input message="typens:tappzBasketUseGiftChequesRequest"/>
+            <output message="typens:tappzBasketUseGiftChequesResponse"/>
+        </operation>
+        <operation name="tappzBasketDeleteGiftCheques">
+            <documentation>Delete gift cheques of a basket</documentation>
+            <input message="typens:tappzBasketDeleteGiftChequesRequest"/>
+            <output message="typens:tappzBasketDeleteGiftChequesResponse"/>
+        </operation>
+        <operation name="tappzBasketUseUserPoints">
+            <documentation>User points in a basket</documentation>
+            <input message="typens:tappzBasketUseUserPointsRequest"/>
+            <output message="typens:tappzBasketUseUserPointsResponse"/>
+        </operation>
+        <operation name="tappzBasketSelectPaymentMethod">
+            <documentation>Set payment type of a basket</documentation>
+            <input message="typens:tappzBasketSelectPaymentMethodRequest"/>
+            <output message="typens:tappzBasketSelectPaymentMethodResponse"/>
+        </operation>
+        <operation name="tappzBasketGetContract">
+            <documentation>Retrieve Basket Agreement</documentation>
+            <input message="typens:tappzBasketGetContractRequest"/>
+            <output message="typens:tappzBasketGetContractResponse"/>
+        </operation>
+        <operation name="tappzBasketPurchaseCreditCard">
+            <documentation>Purchase basket with credit card</documentation>
+            <input message="typens:tappzBasketPurchaseCreditCardRequest"/>
+            <output message="typens:tappzBasketPurchaseCreditCardResponse"/>
+        </operation>
+        <operation name="tappzBasketPurchaseMoneyOrder">
+            <documentation>Purchase basket with money order</documentation>
+            <input message="typens:tappzBasketPurchaseMoneyOrderRequest"/>
+            <output message="typens:tappzBasketPurchaseMoneyOrderResponse"/>
+        </operation>
+        <operation name="tappzBasketPurchaseCashOnDelivery">
+            <documentation>Purchase basket with cash on delivery</documentation>
+            <input message="typens:tappzBasketPurchaseCashOnDeliveryRequest"/>
+            <output message="typens:tappzBasketPurchaseCashOnDeliveryResponse"/>
+        </operation>
+        <operation name="tappzBasketPurchaseWithPayPal">
+            <documentation>Purchase basket with paypal</documentation>
+            <input message="typens:tappzBasketPurchaseWithPayPalRequest"/>
+            <output message="typens:tappzBasketPurchaseWithPayPalResponse"/>
+        </operation>
+        <operation name="tappzBasketPurchaseWithApplePay">
+            <documentation>Purchase basket with credit card</documentation>
+            <input message="typens:tappzBasketPurchaseWithApplePayRequest"/>
+            <output message="typens:tappzBasketPurchaseWithApplePayResponse"/>
+        </operation>
+        <!--basket-->
+    </portType>
+
+    <binding name="{{var wsdl.handler}}Binding" type="typens:{{var wsdl.handler}}PortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <!-- catalog -->
+        <operation name="tappzCatalogGetFrontPage">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzCatalogGetCategories">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzCatalogGetCategory">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzCatalogGetProductList">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzCatalogGetProduct">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzCatalogGetRelatedProducts">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzCatalogGetChildProductId">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <!-- catalog -->
+
+        <!--customer-->
+        <operation name="tappzCustomerInfo">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzCustomerLogin">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzCustomerFacebookLogin">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzCustomerRegister">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzCustomerUpdate">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzCustomerLostPassword">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzCustomerGetUserAgreement">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <!--customer-->
+
+        <!--customer_address-->
+        <operation name="tappzCustomerAddressGetList">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzCustomerAddressCreate">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzCustomerAddressUpdate">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzCustomerAddressDelete">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzCustomerAddressCountryList">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzCustomerAddressStateList">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzCustomerAddressCityList">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzCustomerAddressDistrictList">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzCustomerAddressTownList">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <!--customer_address-->
+
+        <!--customer_order-->
+        <operation name="tappzCustomerOrderGetList">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzCustomerOrderInfo">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <!--customer_order-->
+
+        <!--basket-->
+        <operation name="tappzBasketGet">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzBasketMerge">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzBasketUpdateItems">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzBasketSetAddress">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzBasketSetGiftWrapping">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzBasketUseDiscount">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzBasketDeleteDiscount">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzBasketUseGiftCheques">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzBasketDeleteGiftCheques">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzBasketUseUserPoints">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzBasketSelectPaymentMethod">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzBasketGetContract">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzBasketPurchaseCreditCard">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzBasketPurchaseMoneyOrder">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzBasketPurchaseCashOnDelivery">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzBasketPurchaseWithPayPal">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="tappzBasketPurchaseWithApplePay">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action"/>
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <!--basket-->
+    </binding>
+
+    <service name="{{var wsdl.name}}Service">
+        <port name="{{var wsdl.handler}}Port" binding="typens:{{var wsdl.handler}}Binding">
+            <soap:address location="{{var wsdl.url}}"/>
+        </port>
+    </service>
+
+</definitions>

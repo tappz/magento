@@ -1,0 +1,506 @@
+<?xml version="1.0"?>
+
+<config>
+    <tabs>
+        <tappz translate="label" module="tappz">
+            <label>t-Appz</label>
+            <sort_order>1</sort_order>
+        </tappz>
+    </tabs>
+    <sections>
+        <tappz translate="label" module="tappz">
+            <label>Configuration</label>
+            <class>tappz-info</class>
+            <tab>tappz</tab>
+            <sort_order>10</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <info>
+                    <frontend_model>tappz/info</frontend_model>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                </info>
+                <general translate="label">
+                    <label>General</label>
+                    <sort_order>15</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <store translate="label">
+                            <label>Store</label>
+                            <tooltip>Choose your store for tappz.</tooltip>
+                            <!--<comment>lsdfdslafkhalsdkjfl</comment>-->
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_store</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </store>
+                        <groupSeparator translate="label">
+                            <label>Price Group Separator</label>
+                            <tooltip>Choose group separator for prices.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_divider</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </groupSeparator>
+                        <decimalSeparator translate="label">
+                            <label>Price Decimal Separator</label>
+                            <tooltip>Choose decimal separator for prices.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_divider</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </decimalSeparator>
+                    </fields>
+                </general>
+                <catalog translate="label">
+                    <label>Catalog</label>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                  
+
+                        <catalog1 translate="label tooltip">
+                            <label>Front Page - Product List 1</label>
+                            <tooltip>Choose a category for the first front page rayon.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_category</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <!--<validate>validate-alphanum validate-length-->
+                            <!--minimum-length-20 maximum-length-20-->
+                            <!--</validate>-->
+                        </catalog1>
+                        <catalog2 translate="label tooltip">
+                            <label>Front Page - Product List 2</label>
+                            <tooltip>Choose a category for the second front page rayon.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_category</source_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </catalog2>
+                        <catalog3 translate="label tooltip">
+                            <label>Front Page - Product List 3</label>
+                            <tooltip>Choose a category for the third front page rayon.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_category</source_model>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </catalog3>
+                        <catalog4 translate="label tooltip">
+                            <label>Front Page - Product List 4</label>
+                            <tooltip>Choose a category for the fourth front page rayon.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_category</source_model>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </catalog4>
+                        <productAttributeCodeShippingInfo>
+                            <label>Product Shipping Info Attribute</label>
+                            <tooltip>Choose a product attribute for shipping info of a product.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_product_attribute</source_model>
+                            <sort_order>90</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </productAttributeCodeShippingInfo>
+                        <productAttributeCodeIsShippingFree>
+                            <label>Product Free Shipping Attribute</label>
+                            <tooltip>Choose a product attribute for free shipping information.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_product_attribute</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </productAttributeCodeIsShippingFree>
+                    </fields>
+                </catalog>
+                <customer translate="label">
+                    <label>Customer</label>
+                    <sort_order>30</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <gender>
+                            <label>Gender Attribute</label>
+                            <tooltip>Choose customer gender attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_customer</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </gender>
+                        <email>
+                            <label>Email Attribute</label>
+                            <tooltip>Choose customer email attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_customer</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </email>
+                        <phone>
+                            <label>Phone Attribute</label>
+                            <tooltip>Choose customer phone attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_customer</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </phone>
+                        <birthDate>
+                            <label>Birth Date Attribute</label>
+                            <tooltip>Choose customer birth date attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_customer</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </birthDate>
+                        <agreement>
+                            <label>User Agreement</label>
+                            <tooltip>Enter user agreement.</tooltip>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </agreement>
+                    </fields>
+                </customer>
+                <address translate="label">
+                    <label>Address</label>
+                    <sort_order>40</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <name>
+                            <label>Address Name Attribute</label>
+                            <tooltip>Choose customer address name attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_address</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </name>
+                        <firstname>
+                            <label>First Name Attribute</label>
+                            <tooltip>Choose customer's first name attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_address</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </firstname>
+                        <lastname>
+                            <label>Last Name Attribute</label>
+                            <tooltip>Choose customer's last name attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_address</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </lastname>
+                        <email>
+                            <label>E-mail Attribute</label>
+                            <tooltip>Choose customer's e-mail attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_address</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </email>
+                        <street>
+                            <label>Street Attribute</label>
+                            <tooltip>Choose street attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_address</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </street>
+                        <country_id>
+                            <label>Country Attribute</label>
+                            <tooltip>Choose country attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_address</source_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </country_id>
+                        <region>
+                            <label>State/Province Attribute</label>
+                            <tooltip>Choose state-province attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_address</source_model>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </region>
+                        <region_id>
+                            <label>State/Province Id Attribute</label>
+                            <tooltip>Choose state-province Id attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_address</source_model>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </region_id>
+                        <city>
+                            <label>City Attribute</label>
+                            <tooltip>Choose city attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_address</source_model>
+                            <sort_order>90</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </city>
+                        <city_id>
+                            <label>City Id Attribute</label>
+                            <tooltip>Choose city id attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_address</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </city_id>
+                        <district>
+                            <label>District Attribute</label>
+                            <tooltip>Choose district attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_address</source_model>
+                            <sort_order>110</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </district>
+                        <district_id>
+                            <label>District Id Attribute</label>
+                            <tooltip>Choose district id attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_address</source_model>
+                            <sort_order>120</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </district_id>
+                        <town>
+                            <label>Town Attribute</label>
+                            <tooltip>Choose town attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_address</source_model>
+                            <sort_order>130</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </town>
+                        <town_id>
+                            <label>Town Id Attribute</label>
+                            <tooltip>Choose town id attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_address</source_model>
+                            <sort_order>140</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </town_id>
+                        <isCompany>
+                            <label>Is Company Attribute</label>
+                            <tooltip>Choose if an address is a company address attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_address</source_model>
+                            <sort_order>150</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </isCompany>
+                        <company>
+                            <label>Company Name Attribute</label>
+                            <tooltip>Choose company name attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_address</source_model>
+                            <sort_order>160</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </company>
+                        <taxDepartment>
+                            <label>Tax Department Attribute</label>
+                            <tooltip>Choose tax department attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_address</source_model>
+                            <sort_order>170</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </taxDepartment>
+                        <vatNo>
+                            <label>Tax No Attribute</label>
+                            <tooltip>Choose tax no attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_address</source_model>
+                            <sort_order>180</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </vatNo>
+                        <phone>
+                            <label>Phone Attribute</label>
+                            <tooltip>Choose phone attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_address</source_model>
+                            <sort_order>190</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </phone>
+                        <idNo>
+                            <label>Identity Number Attribute</label>
+                            <tooltip>Choose identity number attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_address</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </idNo>
+                        <postcode>
+                            <label>Postal Code Attribute</label>
+                            <tooltip>Choose postal code or zipcode attribute.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_address</source_model>
+                            <sort_order>210</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </postcode>
+                    </fields>
+                </address>
+                <basket translate="label">
+                    <label>Basket</label>
+                    <sort_order>50</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <averagedeliverydaysattributecode translate="label">
+                            <label>Product Average Delivery Days Attribute</label>
+                            <tooltip>Choose delivery time attribute for a product.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_product_attribute</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </averagedeliverydaysattributecode>
+                        <creditcardpaymenttype>
+                            <label>Credit Card Payment Type</label>
+                            <tooltip>Choose credit card payment type.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_payment</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </creditcardpaymenttype>
+                        <paypalissandbox translate="label">
+                            <label>Paypal Sandbox</label>
+                            <tooltip>Choose if paypal is on test.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_enabled</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </paypalissandbox>
+                        <paypalclientid translate="label">
+                            <label>Paypal Client Id</label>
+                            <tooltip>Enter your paypal client id.</tooltip>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </paypalclientid>
+                        <paypalSecret translate="label">
+                            <label>Paypal Secret</label>
+                            <tooltip>Enter your paypal secret.</tooltip>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </paypalSecret>
+                        <stripeistest translate="label">
+                            <label>Stripe Test</label>
+                            <tooltip>Choose if stripe is on test.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tappz/system_config_enabled</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </stripeistest>
+                        <stripetestsecret translate="label">
+                            <label>Stripe Test Secret</label>
+                            <tooltip>Enter your stripe test secret.</tooltip>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </stripetestsecret>
+                        <stripelivesecret translate="label">
+                            <label>Stripe Live Secret</label>
+                            <tooltip>Enter your stripe live secret.</tooltip>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </stripelivesecret>
+                    </fields>
+                </basket>
+            </groups>
+        </tappz>
+    </sections>
+</config>

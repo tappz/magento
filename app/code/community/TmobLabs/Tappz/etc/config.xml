@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<config>
+    <modules>
+        <TmobLabs_Tappz>
+            <version>1.0.8</version>
+        </TmobLabs_Tappz>
+    </modules>
+    <global>
+        <helpers>
+            <tappz>
+                <class>TmobLabs_Tappz_Helper</class>
+            </tappz>
+        </helpers>
+        <blocks>
+            <tappz>
+                <class>TmobLabs_Tappz_Block</class>
+            </tappz>
+        </blocks>
+        <models>
+            <tappz>
+                <class>TmobLabs_Tappz_Model</class>
+            </tappz>
+        </models>
+    </global>
+</config>
