@@ -99,7 +99,6 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
             ->setStoreId($this->_getStoreId($storeId))
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('is_active')
-            ->addFieldToFilter('is_active',array("in"=>array( '1')))
             ->addIsActiveFilter();
         $tree->addCollectionData($collection, true);
         return $this->categoryToModel($root);
