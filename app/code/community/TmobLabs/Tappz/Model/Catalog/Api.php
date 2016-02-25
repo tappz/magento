@@ -2,13 +2,8 @@
 
 class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
 {
-
     /**
-     * Index service is used for fetch products and banner images for the main page of your application
-     * It does not requires any parameter and can be cached
-     * based on application configuration on the wizard
-     * @see http://document.t-appz.com/swagger/ui/index#!/Api/Api_GetIndex
-     *  @return array
+     * @return mixed
      */
     public function getFrontPage()
     {
@@ -54,12 +49,9 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
         }
         return $sampleEx;
     }
+
     /**
-     * Categories service is used for fetch categories
-     * It does not requires any parameter and can be cached
-     * based on application configuration on the wizard
-     * @return array
-     * @see http://document.t-appz.com/swagger/ui/index#!/Api/Api_GetCategories
+     * @return mixed
      */
     public function getCategories()
     {
@@ -80,12 +72,9 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
     }
 
     /**
-     * Category service gets a category with category id
      * @param $categoryId
      * @return array
-     * @see http://document.t-appz.com/swagger/ui/index#!/Api/Api_GetCategory
      */
-
     public function getCategory($categoryId)
     {
         $storeId = Mage::getStoreConfig('tappz/general/store');
@@ -97,16 +86,16 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
         }
         $collection = Mage::getModel('catalog/category')->getCollection()
             ->setStoreId($this->_getStoreId($storeId))
-            ->addAttributeToSelect('name')
+            ->addAttributeToSelect('name') 
             ->addAttributeToSelect('is_active')
+
             ->addIsActiveFilter();
         $tree->addCollectionData($collection, true);
         return $this->categoryToModel($root);
     }
 
     /**
-     * Filled children model
-     * @param $temp
+     * @param $temp Mage_Catalog_Model_Category
      * @param bool $getChildren
      * @return array
      */
@@ -130,9 +119,6 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
     }
 
     /**
-     * Searches products by phrase and category.
-     * This method is user for both search and product listing under a category.
-     * It is also called with a search and a category id when a category filter selected.
      * @param $phrase
      * @param $categoryId
      * @param $pageNumber
@@ -140,7 +126,6 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
      * @param $filterQuery
      * @param $sort
      * @return array
-     * @see http://document.t-appz.com/swagger/ui/index#!/Api/Api_Search
      */
     public function getProductList($phrase, $categoryId, $pageNumber, $pageSize, $filterQuery, $sort)
     {
@@ -173,7 +158,7 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
             $sortArr = explode("-", $sort);
             $collection->addAttributeToSort($sortArr[0], $sortArr[1]);
         }
-         $pageSize = 5;
+        
         empty($pageNumber) ?    $pageNumber = 1 :  $pageNumber +=1;
 
         if (empty($pageSize))
@@ -200,10 +185,8 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
     }
 
     /**
-     * Product service get a product with product id
      * @param $productId
      * @return array
-     * @see http://document.t-appz.com/swagger/ui/index#!/Api/Api_ProductById
      */
     public function getProduct($productId)
     {
@@ -272,6 +255,7 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
         if ($stockStatus == 1)
             $isInStock = true;
         $productInfo['inStock'] = $isInStock;
+
         $productAttributeCodeIsShippingFree = Mage::getStoreConfig('tappz/catalog/productAttributeCodeShippingInfo');
         $productInfo['isShipmentFree'] = $product->getData($productAttributeCodeIsShippingFree);
         $productInfo['productUrl'] = $product->getProductUrl();
@@ -293,8 +277,6 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
                 $group['values'] = array();
                 $group['id'] = $val['attribute_code'];
                 $group['name'] = $val['label'];
-                if ($val['attribute_code'] == 'beden')
-                    $productInfo['additionalDetail'] = "<a href=\"http://annelutfen.com/skin/frontend/purple/purple/images/olcu_tablosu_gri.png\">Ölçü tablosu</a>";
                 foreach ($val['values'] as $vv) {
                     $groupValue = array();
                     $groupValue['id'] = null;
@@ -310,11 +292,10 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
         $productInfo['shipmentInformation'] = $product->getData($productAttributeCodeShippingInfo);
         return $productInfo;
     }
+
     /**
-     * Product related  service get  related products  with product id
      * @param $productId
      * @return array
-     * @see http://document.t-appz.com/swagger/ui/index#!/Api/Api_RelatedProducts
      */
     public function getRelatedProducts($productId)
     {
@@ -333,8 +314,8 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
         }
         return $arData;
     }
+
     /**
-     * Get child product id by parent Product Id
      * @param $parentProductId
      * @param $attributeList
      * @return int
@@ -342,7 +323,7 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
     public function getChildProductId($parentProductId, $attributeList)
     {
         $subProductIds = Mage::getModel('catalog/product_type_configurable')
-            ->getChildrenIds($parentProductId);
+            ->getChildrenIds($parentProductId); //get the children ids through a simple query
         $subProducts = Mage::getModel('catalog/product')->getCollection()
             ->addAttributeToFilter('entity_id', $subProductIds);
         foreach ($attributeList as $attribute) {

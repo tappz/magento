@@ -1,2 +1,3 @@
 .idea
 .gitignore 
+/app/code/community/TmobLabs/Tappz/nbproject/private/

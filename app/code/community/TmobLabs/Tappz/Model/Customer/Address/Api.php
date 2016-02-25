@@ -313,27 +313,44 @@ class TmobLabs_Tappz_Model_Customer_Address_Api extends Mage_Api_Model_Resource_
     /**
      * @param $stateId
      * @return array
-     * todo should be done
+     *
      */
     public function cityList($stateId)
     {
-        return array();
+        try {
+            $country = Mage::getModel('directory/country')->load($stateId);
+        } catch (Mage_Core_Exception $e) {
+            $this->_fault('country_not_exists', $e->getMessage());
+        }
+        if (!$country->getId()) {
+            $this->_fault('country_not_exists');
+        }
+        $result = array();
+        foreach ($country->getRegions() as $region) {
+            $region->getName(); // Loading name in default locale
+            $location = array();
+            $location['code'] = $region->getId();
+            $location['name'] = $region->getName();
+            $result[] = $location;
+        }
+        return $result;      
     }
 
     /**
      * @param $stateId
      * @return array
-     * todo should be done
+     *
      */
     public function districtList($stateId)
     {
+
         return array();
     }
 
     /**
      * @param $stateId
      * @return array
-     * todo should be done
+     *
      */
     public function townList($stateId)
     {

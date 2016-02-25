@@ -92,8 +92,6 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
             $basket['delivery']['shippingMethod']['imageUrl'] = null;
             $basket['discountTotal'] = number_format($quoteShippingAddress->getData('discount_amount'), 2, $decimalDivider, $thousandDivider);
             $basket['shippingTotal'] = number_format($quoteShippingAddress->getData('shipping_incl_tax'), 2, $decimalDivider, $thousandDivider);
-        } else {
-            
         }
         $basket['itemsPriceTotal'] = number_format($quote->getData('base_subtotal'), 2, $decimalDivider, $thousandDivider);
         if (!isset($basket['discountTotal']))
@@ -182,7 +180,8 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
             $code = $method->getCode();
             if ($code == $creditCardPaymentType) {
                 try {
-                    $paymentOptions['creditCards'] = $this->getTaksitSecenekleri($quote->getId());
+
+                    //$paymentOptions['creditCards'] = $this->installmentCash($quote->getId());
                 } catch (Exception $e) {
                     $paymentOptions['creditCards'] = array();
                 }
@@ -202,7 +201,7 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
                 $paymentOptions['moneyTransfers'][0]['branch'] = ' ';
                 $paymentOptions['moneyTransfers'][0]['accountNumber'] = ' ';
                 $paymentOptions['moneyTransfers'][0]['iban'] = ' ';
-                $paymentOptions['moneyTransfers'][0]['imageUrl'] = 'https://ec2-54-195-21-237.eu-west-1.compute.amazonaws.com/bitnami/images/corner-logo.png'; // TODO
+                $paymentOptions['moneyTransfers'][0]['imageUrl'] = ''; // TODO
             } elseif ($code == 'cashondelivery') {
                 $paymentOptions['cashOnDelivery'] = array();
                 $paymentOptions['cashOnDelivery']['type'] = null;
@@ -231,7 +230,6 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
             }
         }
         $basket['paymentOptions'] = $paymentOptions;
-
         $shippingMethods = array();
         if (isset($quoteShippingAddress)) {
                 $quoteShippingAddress->collectShippingRates()->save();
@@ -251,10 +249,9 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
                 }
         }
         $basket['shippingMethods'] = $shippingMethods;
-
         $giftCheques = array();
         if ($quote->getData('gift_cards')) {
-
+            // TODO
         }
         $basket['giftCheques'] = $giftCheques;
         $basket['spentGiftChequeTotal'] = number_format($quote->getData('gift_cards_amount'), 2, $decimalDivider, $thousandDivider);
@@ -550,10 +547,12 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
                     $paymentData['cc_exp_month'] = $creditCard->month;
                     $paymentData['cc_exp_year'] = $creditCard->year;
                     $paymentData['cc_cid'] = $creditCard->cvv;
+                    $session = Mage::getSingleton('checkout/session');
                     $session->setData('ccNumber', $creditCard->number);
                     $session->setData('ccType', $type);
                     $session->setData('expYear', $creditCard->year);
                     $session->setData('expMonth', $creditCard->month);
+                    $session->setData('cvv', $creditCard->cvv);
                 } else {
                     return $this->get($quote->getId());
                 }
@@ -636,7 +635,7 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
         }
         return $quote;
     }
-
+ 
     /**
      * @param $method
      * @param $quote
@@ -744,9 +743,10 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
     /**
      * @param $quoteId
      * @return mixed
-     * todo do payment
+     *
      *
      */
+
     public function purchaseCreditCard($quoteId)
     {
         $store = Mage::getStoreConfig('tappz/general/store');
@@ -754,13 +754,15 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
             ->setStoreId($store)
             ->load($quoteId);
         try {
-            $session = Mage::getSingleton('checkout/session');
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, 'http://www.annelutfen.com/gtrpay/grinet/teb_payment/');
-            curl_setopt($ch, CURLOPT_POST, 1);
-            $token_result_json = curl_exec($ch);
-            curl_close($ch);
-            $token_result = json_decode($token_result_json);
+        /**
+         *
+         * Get session (which we set  on  selectPaymentMethod ) of credit card & do request for payment
+         * ccNumber
+         * ccType
+         * expYear
+         * cvv
+         *
+         */
         } catch (Mage_Core_Exception $e) {
             $this->_fault('invalid_data', $e->getMessage());
         }
@@ -777,7 +779,6 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
         $orderId = $this->purchase($quote);
         return Mage::getSingleton('tappz/Customer_Order_Api')->info($orderId);
     }
- /* @var $quote Mage_Sales_Model_Quote */
     public function purchaseCashOnDelivery($quoteId, $cashOnDelivery)
     {
         $store = Mage::getStoreConfig('tappz/general/store');
@@ -787,11 +788,11 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
         $orderId = $this->purchase($quote);
         return Mage::getSingleton('tappz/Customer_Order_Api')->info($orderId);
     }
-   /* @var $quote Mage_Sales_Model_Quote */
-   /* @var $convert Mage_Sales_Model_Convert_Quote */
-   /* @var $transaction Mage_Core_Model_Resource_Transaction */
-    //$quote->setTotalsCollectedFlag(true);
-    /** @var Mage_Sales_Model_Order_Item $item */
+
+    /**
+     * @param $quote
+     * @return mixed
+     */
     public function createNewOrder($quote)
     {
         Mage::getSingleton('checkout/session')->replaceQuote($quote);
@@ -845,9 +846,7 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
                 )
             );
         } catch (Exception $e) {
-            //reset order ID's on exception, because order not saved
             $order->setId(null);
-            /** @var $item Mage_Sales_Model_Order_Item */
             foreach ($order->getItemsCollection() as $item) {
                 $item->setOrderId(null);
                 $item->setItemId(null);
@@ -867,13 +866,18 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
         Mage::dispatchEvent('sales_model_service_quote_submit_after', array('order' => $order, 'quote' => $quote));
         return $order;
     }
+
+    /**
+     * @param $quoteId
+     * @param $transactionId
+     * @return mixed
+     */
     public function purchaseWithPayPal($quoteId, $transactionId)
     {
         $paypalIsSandBox = (bool)Mage::getStoreConfig('tappz/basket/paypalissandbox');
         $paypalClientId = Mage::getStoreConfig('tappz/basket/paypalclientid');
         $paypalSecret = Mage::getStoreConfig('tappz/basket/paypalSecret');
         $store = Mage::getStoreConfig('tappz/general/store');
-        /* @var $quote Mage_Sales_Model_Quote */
         $quote = Mage::getModel("sales/quote")
             ->setStoreId($store)
             ->load($quoteId);
@@ -921,7 +925,12 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
             $this->_fault('invalid_data', 'PayPal transaction is not completed.');
         }
     }
-    /* @var $quote Mage_Sales_Model_Quote */
+
+    /**
+     * @param $quoteId
+     * @param $tokenId
+     * @return mixed
+     */
     public function purchaseWithApplePay($quoteId, $tokenId)
     {
         $stripeIsTest = (bool)Mage::getStoreConfig('tappz/basket/stripeistest');
@@ -974,76 +983,110 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
         }
     }
 
-    // TODO : mcgoncu - annelutfen icin ekle
-    public function getTaksitSecenekleri($quoteId)
+    /**
+     * @param $quoteId
+     * @return array
+     *
+     * İf you dont use
+     */
+    public function installmentCash($quoteId)
     {
         $bankInfos = array();
-        $exclude_cats = array(219, 218, 527, 217, 651, 329, 331, 678);
-        $show_taksits = true;
+        $showInstallments = true;
         $cats = array();
         $cart = Mage::getModel("sales/quote")->load($quoteId);
+        $amount = $cart->getGrandTotal();
         $cartItems = $cart->getItems();
-        $tutar = $cart->getGrandTotal();
-        foreach ($cartItems as $item) {
-            $cats[] = $item->getProduct()->getCategoryIds();
-        }
-        if (count($cats) > 0) {
-            foreach ($cats as $vals) {
-                foreach ($vals as $dd) {
-                    if (in_array($dd, $exclude_cats)) {
-                        $show_taksits = false;
+        /**
+         * İf you have specific categories  that not allowed installment please go to excludeCategories
+         * and add your categories id
+         */
+        $excludeCats = $this->excludeCategories();
+        if(count($excludeCats) > 0){
+            foreach ($cartItems as $item) {
+                $cats[] = $item->getProduct()->getCategoryIds();
+            }
+            if (count($cats) > 0) {
+                foreach ($cats as $rows) {
+                    foreach ($rows as $row) {
+                        if (in_array($row, $excludeCats)) {
+                            $showInstallments = false;
+                        }
                     }
                 }
             }
         }
-        $turkpay = Mage::getModel('Grinet_Turkpay_Model_Grinet');
-        if ($turkpay) {
-            $bank_avs = $turkpay->bankalar();
+        /**
+         * İf you  use any extension you have to add here
+         */
+        $model = Mage::getModel('Grinet_Turkpay_Model_Grinet');
+        if ($model) {
+            /**
+             * Get  your banks
+             */
+             $banks = $model->bankalar();
         }
-        if (!empty($bank_avs)) {
+        if (!empty($banks)) {
             $bankCount = 0;
-            $fark = 0;
-            foreach ($bank_avs as $bank_code => $bank) {
-                $tdata = $turkpay->taksitler($bank_code, $tutar);
+            $fee = 0;
+            foreach ($banks as $bank_code => $bank) {
+                /**
+                 * Get  Instalments
+                 */
+                $installments = $model->taksitler($bank_code, $amount);
                 $valCount = 0;
-                foreach ($tdata as $tay => $toran) {
-                    $toplam_tutar = $tutar + (($tutar / 100) * floatval($toran)) + $fark;// - ( ( $fark / 100 ) * floatval($toran) ) ;
-                    $custom_title = Mage::getStoreConfig($bank_code . '/taksit_baslik/taksit_' . $tay);
-                    if (trim($custom_title) == '')
-                        $taksit_title = 'Tek Çekim';
-                    else
-                        $taksit_title = $custom_title;
-
-                    if ($show_taksits === false) {
-                        $custom_title = Mage::getStoreConfig($bank_code . '/taksit_baslik/taksit_0');
-                        if (trim($custom_title) == '')
-                            $taksit_title = 'Tek Çekim';
-                        else
-                            $taksit_title = $custom_title;
-                    }
-                    $bankInfos[$bankCount]['image'] = null; // TODO : annelutfen - banka imajı
+                foreach ($installments as $key => $toran) {
+                    $totalAmount = $amount + (($amount / 100) * floatval($toran)) + $fee;
+                    $custom_title = Mage::getStoreConfig($bank_code . '/taksit_baslik/taksit_' . $key);
+                    $installmentTitle = (trim($custom_title) == '')? false :$custom_title;
+                    /**
+                     *  Bank logo & image
+                     */
+                    $bankInfos[$bankCount]['image'] = null;
+                    /**
+                     *  Bank name
+                     */
                     $bankInfos[$bankCount]['displayName'] = trim($bank['name']);
-                    $bankInfos[$bankCount]['type'] = null;// TODO : annelutfen - kart kodu
-                    $bankInfos[$bankCount]['installmentNumber'] = null; // TODO : annelutfen - maximum taksit sayısı
-                    $bankInfos[$bankCount]['installments'][$valCount]['installmentNumber'] = $valCount; // TODO - annelutfen - dogru mu bu?
-                    $bankInfos[$bankCount]['installments'][$valCount]['installmentPayment'] = round($toplam_tutar / $valCount, 2, PHP_ROUND_HALF_UP); // TODO - annelutfen - dogru mu bu?
-                    $bankInfos[$bankCount]['installments'][$valCount]['total'] = round($toplam_tutar, 2, PHP_ROUND_HALF_UP);
-                    if ($show_taksits === false) {
-                        if ($taksit_title == "Tek Çekim")
+                    /**
+                     * Bank type
+                     */
+                    $bankInfos[$bankCount]['type'] = null;
+                    /**
+                     * Bank  installments (example :  if you have   9 months installments you should simply  add "9"  )
+                     */
+                    $bankInfos[$bankCount]['installmentNumber'] = null;
+                    $bankInfos[$bankCount]['installments'][$valCount]['installmentNumber'] = null;
+                    $bankInfos[$bankCount]['installments'][$valCount]['installmentPayment'] = round($totalAmount / $valCount, 2, PHP_ROUND_HALF_UP);
+                    $bankInfos[$bankCount]['installments'][$valCount]['total'] = round($totalAmount, 2, PHP_ROUND_HALF_UP);
+                    if ($showInstallments === false && $installmentTitle == false) {
                             break;
                     }
                     $valCount++;
                 }
                 $bankCount++;
             }
-        } else
+        } else{
             $bankInfos = null;
+        }
         return $bankInfos;
     }
 
-        /* @var $quote Mage_Sales_Model_Quote */
-         /* @var $product Mage_Catalog_Model_Product */
-        
+    /**
+     * İf you have specific categories that not allowed installment Cash
+     * Please set category ids in array
+     * Example : $categories = array("{{category_id}}","{{category_id}}");
+     *
+     */
+    public function excludeCategories()
+    {
+        $categories = array();
+        return $categories;
+    }
+    /**
+     * @param $quoteId
+     * @return string
+     *
+     */
     public function getSupplyDate($quoteId)
     {
         $store = Mage::getStoreConfig('tappz/general/store');
@@ -1087,7 +1130,6 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
             $by_3 = false;
             $by_0 = false;
         }
-
         $cMsg = '';
         if ($by_0) {
             $cMsg = "Sepetinizdeki ürünlerin tamamı aynı günde kargoya teslim edilecektir.";
@@ -1104,7 +1146,6 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
         if ($by_7) {
             $cMsg = "Sepetinizdeki ürünlerin tamamı 7 iş gününde kargoya teslim edilecektir.";
         }
-
         return $cMsg;
     }
 }

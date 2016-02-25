@@ -28,10 +28,10 @@ class TmobLabs_Tappz_Model_Customer_Order_Api extends Mage_Sales_Model_Order_Api
         }
         return $result;
     }
-
     /**
-     * @param $orderId
-     * @return array
+     * 
+     * @param type $orderId
+     * @return type
      */
     public function info($orderId)
     {
@@ -61,10 +61,10 @@ class TmobLabs_Tappz_Model_Customer_Order_Api extends Mage_Sales_Model_Order_Api
         $result['billing_address'] = $addressApi->get($order->getBillingAddress()->getCustomerAddressId());
         return $this->prepareOrder($result);
     }
-
     /**
-     * @param $order
-     * @return array
+     * 
+     * @param type $order
+     * @return type
      */
     protected function prepareOrder($order)
     {
