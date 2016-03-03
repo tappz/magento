@@ -4,7 +4,7 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
 {
     /**
      * @param $quoteId
-     * @param null $customerId
+     * @param null $customerId 
      * @return array
      */
     public function get($quoteId, $customerId = null)
@@ -12,7 +12,6 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
         $decimalDivider = Mage::getStoreConfig('tappz/general/decimalSeparator');
         $thousandDivider = Mage::getStoreConfig('tappz/general/groupSeparator');
         $store = Mage::getStoreConfig('tappz/general/store');
-
         $lineAverageDeliveryDaysAttributeCode = Mage::getStoreConfig('tappz/basket/averagedeliverydaysattributecode');
         $creditCardPaymentType = Mage::getStoreConfig('tappz/basket/creditcardpaymenttype');
         $basket = array();
@@ -178,14 +177,13 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
         $methods = Mage::helper('payment')->getStoreMethods($store, $quote);
         foreach ($methods as $method) {
             $code = $method->getCode();
-            if ($code == $creditCardPaymentType) {
+            if ($code == $creditCardPaymentType || $code == "grinet_turkpay") {
                 try {
-
-                    //$paymentOptions['creditCards'] = $this->installmentCash($quote->getId());
+                  $paymentOptions['creditCards'] = $this->installmentCash($quote->getId());
                 } catch (Exception $e) {
                     $paymentOptions['creditCards'] = array();
                 }
-                if (!isset($paymentOptions['creditCards'])) {
+                if (count($paymentOptions['creditCards'])==0) {
                     $paymentOptions['creditCards'] = array();
                     $paymentOptions['creditCards'][0]['image'] = null;
                     $paymentOptions['creditCards'][0]['displayName'] = 'Default Credit Card';
@@ -547,7 +545,7 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
                     $paymentData['cc_exp_month'] = $creditCard->month;
                     $paymentData['cc_exp_year'] = $creditCard->year;
                     $paymentData['cc_cid'] = $creditCard->cvv;
-                    $session = Mage::getSingleton('checkout/session');
+                    $session = Mage::getSingleton('core/session');
                     $session->setData('ccNumber', $creditCard->number);
                     $session->setData('ccType', $type);
                     $session->setData('expYear', $creditCard->year);
@@ -747,29 +745,68 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
      *
      */
 
-    public function purchaseCreditCard($quoteId)
+    public function purchaseCreditCard($quoteId,$payment)
     {
-        $store = Mage::getStoreConfig('tappz/general/store');
-        $quote = Mage::getModel("sales/quote")
-            ->setStoreId($store)
-            ->load($quoteId);
-        try {
-        /**
-         *
-         * Get session (which we set  on  selectPaymentMethod ) of credit card & do request for payment
-         * ccNumber
-         * ccType
-         * expYear
-         * cvv
-         *
-         */
-        } catch (Mage_Core_Exception $e) {
-            $this->_fault('invalid_data', $e->getMessage());
+        $orders = Mage::getModel('sales/order')->getCollection()
+         ->setOrder('created_at','DESC')
+         ->setPageSize(1)
+         ->setCurPage(1);
+        $orderId = $orders->getFirstItem()->getEntityId();
+        $api_key = "QtAvcsfCupU8XkA2XVf7eiF1Sz7YX0SyLfX6ofGR";
+        $post_arr = array(
+                    "banka"                =>  $payment->bankCode,
+                    "taksit"            => $payment->installment,
+                    "cc_owner"            =>$payment->creditCard->owner,
+                    "cc_number"            =>$payment->creditCard->number,
+                    "cc_cvv"            => $payment->creditCard->cvv,
+                    "cc_expire_month"    => $payment->creditCard->month,
+                    "cc_expire_year"    =>$payment->creditCard->year,
+                    "order_id"            => "$orderId",
+                    "quote_id"            => "$quoteId",
+                    "date"                => date("Y-m-d H:i:s"),
+                    "customer_ip"        => $this->getClientIP(),
+                );
+        $hash_text = $post_arr['order_id'].
+                $post_arr['quote_id'].
+                $post_arr['banka'].
+                $post_arr['cc_number'].
+                $api_key.$post_arr['date'];
+        $hash = md5($hash_text);
+        $post_arr["grinet_mobile_hash"] = $hash;
+        $url = Mage::getBaseUrl (Mage_Core_Model_Store::URL_TYPE_WEB).
+                "gtrpay/grinet/".$post_arr['banka']."_payment/";
+        $ch = curl_init();   
+        curl_setopt($ch, CURLOPT_URL,$url);              
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,2);
+        curl_setopt($ch, CURLOPT_SSLVERSION, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);          
+        curl_setopt($ch, CURLOPT_TIMEOUT, 90);               
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_arr);     
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+        $result        = curl_exec($ch); 
+        $msg  = json_decode($result);
+        if( strtolower( trim($msg->status)) == "error" ){
+            if(isset($msg->error_message)){
+                $error_msg =$msg->error_message;
+            }elseif(isset($msg->customer_message)){
+                   $error_msg =$msg->customer_message;
+            }
+             $this->_fault('invalid_data',$error_msg);
+        }else {
+            return Mage::getSingleton('tappz/Customer_Order_Api')->info($orderId);
         }
-        $orderId = $this->purchase($quote);
-        return Mage::getSingleton('tappz/Customer_Order_Api')->info($orderId);
     }
-
+    public function getClientIP(){
+     if (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)){
+            return  $_SERVER["HTTP_X_FORWARDED_FOR"];  
+        }else if (array_key_exists('REMOTE_ADDR', $_SERVER)) { 
+            return $_SERVER["REMOTE_ADDR"]; 
+        }else if (array_key_exists('HTTP_CLIENT_IP', $_SERVER)) {
+            return $_SERVER["HTTP_CLIENT_IP"]; 
+        } 
+        return '';
+    }
     public function purchaseMoneyOrder($quoteId, $moneyOrderType)
     {
         $store = Mage::getStoreConfig('tappz/general/store');

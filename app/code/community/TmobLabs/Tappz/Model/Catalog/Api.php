@@ -3,10 +3,11 @@
 class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
 {
     /**
-     * @return mixed
+     * @return mixed 
      */
     public function getFrontPage()
     {
+
         $sampleEx['ads'][0]['name'] = null;
         $sampleEx['ads'][0]['image'] ="";
         $sampleEx['ads'][0]['type'] ="";
@@ -64,7 +65,7 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
         $store = Mage::getModel('core/store')->load($storeId);
 
         $rootCategoryId = $store->getRootCategoryId();
-        if (!$rootCategoryId) {
+        if (!isset($rootCategoryId)) {
             $rootCategoryId = 2;
         }
         $rootCategory = $this->getCategory($rootCategoryId);
@@ -77,6 +78,7 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
      */
     public function getCategory($categoryId)
     {
+        
         $storeId = Mage::getStoreConfig('tappz/general/store');
         $tree = Mage::getResourceSingleton('catalog/category_tree')
             ->load();
@@ -89,6 +91,7 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
             ->addAttributeToSelect('name') 
             ->addAttributeToSelect('is_active')
             ->addAttributeToFilter('include_in_menu', 1)
+
             ->addIsActiveFilter();
         $tree->addCollectionData($collection, true);
         return $this->categoryToModel($root);
@@ -190,6 +193,7 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
      */
     public function getProduct($productId)
     {
+       
         $storeId = (int)Mage::getStoreConfig('tappz/general/store');
         if ($storeId <= 0) {
             $storeId = 1;

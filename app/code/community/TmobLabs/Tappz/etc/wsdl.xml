@@ -890,6 +890,7 @@
     <message name="tappzBasketPurchaseCreditCardRequest">
         <part name="sessionId" type="xsd:string"/>
         <part name="quoteId" type="xsd:string"/>
+        <part name="payment" type="typens:payment"/>
     </message>
     <message name="tappzBasketPurchaseCreditCardResponse">
         <part name="order" type="typens:order"/>

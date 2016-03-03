@@ -5,7 +5,7 @@ class TmobLabs_Tappz_Model_Customer_Api extends Mage_Customer_Model_Api_Resource
     /**
      * @param $data
      * @return array
-     */
+     */ 
     protected function _prepareCustomerData($data)
     {
         $genderAttributeCode = Mage::getStoreConfig('tappz/customer/gender');
@@ -119,7 +119,6 @@ class TmobLabs_Tappz_Model_Customer_Api extends Mage_Customer_Model_Api_Resource
      */
     public function facebookLogin($facebookAccessToken, $facebookUserId)
     {
-     Mage::log(var_export($facebookAccessToken,TRUE));
      $curl = curl_init();
      curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
      curl_setopt($curl, CURLOPT_URL, "https://graph.facebook.com/$facebookUserId?access_token=$facebookAccessToken");
