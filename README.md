@@ -14,7 +14,7 @@ Entegrasyonun tamamlanması için
   ```
   
   **Bu güncelleme sağlandıktan   wsdl  cache'inin silinmelidir.** 
-  - Kredi kartı  ile ödeme methodunun düzenlemesi 
+  - Turkpay ödeme entegrasyonu 
 
   
   https://github.com/tappz/magento/blob/turkpay/app/code/community/TmobLabs/Tappz/Model/Basket/Api.php
@@ -25,7 +25,7 @@ Entegrasyonun tamamlanması için
   ```
   dosya ile değiştirmeniz gerekmektedir.
   
- - Api key oluşturulması 
+  - Api key oluşturulması 
 
 Magnento admine giriş yaptıktan sonra 
  System > Configuration > Grinet turkpay > Genel Ayarlar > Web Servis Üzerinden Tahsilatı
