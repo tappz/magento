@@ -19,7 +19,7 @@ Entegrasyonun tamamlanması için
   
   https://github.com/tappz/magento/blob/turkpay/app/code/community/TmobLabs/Tappz/Model/Basket/Api.php
   
-  Linkte bulunan  ile projenizde bulunan 
+  Linkte bulunan dosya  ile projenizde bulunan 
   ```sh
   app/code/community/TmobLabs/Tappz/Model/Basket/api.php 
   ```
