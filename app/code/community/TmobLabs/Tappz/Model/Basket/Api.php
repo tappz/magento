@@ -787,14 +787,24 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
         $result        = curl_exec($ch); 
         $msg  = json_decode($result);
         if( strtolower( trim($msg->status)) == "error" ){
-            if(isset($msg->error_message)){
-                $error_msg =$msg->error_message;
+            if(isset($msg->system_message)){
+                    $error_msg = $msg->system_message;
+            }
+            elseif(isset($msg->error_message)){
+                $error_msg = $msg->error_message;
             }elseif(isset($msg->customer_message)){
-                   $error_msg =$msg->customer_message;
+                   $error_msg = $msg->customer_message;
             }
              $this->_fault('invalid_data',$error_msg);
-        }else {
+        }elseif(strtolower( trim($msg->status)) == "success"){
+          $store = Mage::getStoreConfig('tappz/general/store');
+            $quote = Mage::getModel("sales/quote")
+            ->setStoreId($store)
+            ->load($quoteId);
+           $orderId = $this->purchase($quote);
             return Mage::getSingleton('tappz/Customer_Order_Api')->info($orderId);
+        }else{
+                   $this->_fault('invalid_data',"Unknown payment status");
         }
     }
     public function getClientIP(){
