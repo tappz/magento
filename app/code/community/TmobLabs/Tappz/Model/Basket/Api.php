@@ -1087,7 +1087,7 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
                     /**
                      * Bank type
                      */
-                    $bankInfos[$bankCount]['type'] = null;
+                    $bankInfos[$bankCount]['type'] =  $bank_code;
                     /**
                      * Bank  installments (example :  if you have   9 months installments you should simply  add "9"  )
                      */
