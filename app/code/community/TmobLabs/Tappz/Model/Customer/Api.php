@@ -119,16 +119,43 @@ class TmobLabs_Tappz_Model_Customer_Api extends Mage_Customer_Model_Api_Resource
      */
     public function facebookLogin($facebookAccessToken, $facebookUserId)
     {
-     Mage::log(var_export($facebookAccessToken,TRUE));
-     $curl = curl_init();
-     curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
-     curl_setopt($curl, CURLOPT_URL, "https://graph.facebook.com/$facebookUserId?access_token=$facebookAccessToken");
-     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-     $result = curl_exec($curl);
-     $result= json_decode($result);
-     curl_close($curl);
-     $customer = Mage::getModel('customer/customer');
-    // $customer = $customer->loadByEmail($userName);
+        $storeId = Mage::getStoreConfig('tappz/general/store');
+         $store = Mage::getModel('core/store')->load($storeId);
+         $curl = curl_init();
+         curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
+         curl_setopt($curl, CURLOPT_URL, "https://graph.facebook.com/$facebookUserId?access_token=$facebookAccessToken");
+         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+         $result = curl_exec($curl);
+         $userInfo =  json_decode($result);
+         curl_close($curl);
+         $email = $userInfo->email;
+         $customerExist = Mage::getModel('customer/customer')
+                ->getCollection()
+                ->addAttributeToSelect('*')
+                ->addAttributeToFilter('email', "$email" )
+                ->getFirstItem();
+         if(($customerExist['entity_id']) > 0){
+                $customer = Mage::getModel('customer/customer')->setStore($store);
+               $customer->loadByEmail($email);
+            return $this->info($customer->getId());
+         }else{
+         $password  = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 10);
+         $registerCustomer["fullName"] = $userInfo->name;
+         $registerCustomer["firstName"]  = $userInfo->first_name;
+         $registerCustomer["lastName"] = $userInfo->last_name;
+         $registerCustomer["customerId"] = "";
+         $registerCustomer["isSubscribed"] = 1;
+         $registerCustomer["gender"] =  $userInfo->gender ;
+         $registerCustomer["isAccepted"]=$userInfo->verified;
+         $registerCustomer[ "email"] = $email;
+         $registerCustomer[ "password"] = $password;
+         $registerCustomer["phone"] = "";
+         $registerCustomer["birthDate"] = "" ;
+         $registerCustomer["points"] = "";
+         $registerCustomer[ "addresses"] = array();
+         $registerCustomer["giftCheques"] = array();
+         return$this->register((object)$registerCustomer);
+         }
     }
     /**
      * 
