@@ -76,7 +76,7 @@ https://github.com/tappz/magento/blob/cache/app/code/community/TmobLabs/Tappz/Mo
 
 
  
-## Redis  
+## Redis   Optimization
 
 
 Go to tappz module file 
