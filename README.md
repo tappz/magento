@@ -88,7 +88,7 @@ Go to helper file and copy & paste this helper class
 
 https://github.com/tappz/magento/blob/cache/app/code/community/TmobLabs/Tappz/Helper/Redis.php
 
-Check & change your memcache server  details
+Check & change your redis server  details
 ```sh
  private $_host = "127.0.0.1";
  private $_port = "6379";
@@ -118,7 +118,7 @@ if  this key doesnt have data ; we have to set our data to this key
  }
   return $sampleEx;
   ```
-From now on we set our data to  getFrontPage(key).Until nemcache expire each request going to memcache not your database.
+From now on we set our data to  getFrontPage(key).Until nemcache expire each request going to redis not your database.
 You can simple go to
 
 https://github.com/tappz/magento/blob/cache/app/code/community/TmobLabs/Tappz/Model/Catalog/Api.php
