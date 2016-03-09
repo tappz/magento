@@ -8,7 +8,7 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
     public function getFrontPage()
     {
 
-        $cache = Mage::helper('tappz/redis');
+        $cache = Mage::helper('tappz/memcache');
         $sampleEx = $cache->get("getFrontPage");
         if($sampleEx === FALSE) {
         $sampleEx['ads'][0]['name'] = null;
@@ -61,7 +61,7 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
      */
     public function getCategories()
     {
-        $cache = Mage::helper('tappz/redis');
+        $cache = Mage::helper('tappz/memcache');
         $rootCategory  = $cache->get("categories");
         if($rootCategory === FALSE) {
             $storeId = (int)Mage::getStoreConfig('tappz/general/store');
