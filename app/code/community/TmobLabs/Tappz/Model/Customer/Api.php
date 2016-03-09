@@ -150,7 +150,7 @@ class TmobLabs_Tappz_Model_Customer_Api extends Mage_Customer_Model_Api_Resource
          $registerCustomer[ "email"] = $email;
          $registerCustomer[ "password"] = $password;
          $registerCustomer["phone"] = "";
-         $registerCustomer["birthDate"] = "" ;
+         $registerCustomer["birthDate"] = $userInfo->birthday ;
          $registerCustomer["points"] = "";
          $registerCustomer[ "addresses"] = array();
          $registerCustomer["giftCheques"] = array();
