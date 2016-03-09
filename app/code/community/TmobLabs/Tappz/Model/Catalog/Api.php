@@ -3,10 +3,14 @@
 class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
 {
     /**
-     * @return mixed
+     * @return mixed 
      */
     public function getFrontPage()
     {
+
+        $cache = Mage::helper('tappz/redis');
+        $sampleEx = $cache->get("getFrontPage");
+        if($sampleEx === FALSE) {
         $sampleEx['ads'][0]['name'] = null;
         $sampleEx['ads'][0]['image'] ="";
         $sampleEx['ads'][0]['type'] ="";
@@ -47,6 +51,8 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
             $group['products'] = $productList['products'];
             $sampleEx['groups'][] = $group;
         }
+            $cache->store("getFrontPage",$sampleEx);
+         }
         return $sampleEx;
     }
 
@@ -55,19 +61,23 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
      */
     public function getCategories()
     {
-        $storeId = (int)Mage::getStoreConfig('tappz/general/store');
-        if ($storeId <= 0) {
-            $storeId = 1;
-        }
- 
-        /** @var Mage_Core_Model_Store $store */
-        $store = Mage::getModel('core/store')->load($storeId);
+        $cache = Mage::helper('tappz/redis');
+        $rootCategory  = $cache->get("categories");
+        if($rootCategory === FALSE) {
+            $storeId = (int)Mage::getStoreConfig('tappz/general/store');
+            if ($storeId <= 0) {
+                $storeId = 1;
+            }
+            /** @var Mage_Core_Model_Store $store */
+            $store = Mage::getModel('core/store')->load($storeId);
 
-        $rootCategoryId = $store->getRootCategoryId();
-        if (!$rootCategoryId) {
-            $rootCategoryId = 2;
-        }
-        $rootCategory = $this->getCategory($rootCategoryId);
+            $rootCategoryId = $store->getRootCategoryId();
+            if (!isset($rootCategoryId)) {
+                $rootCategoryId = 2;
+            }
+            $rootCategory = $this->getCategory($rootCategoryId);
+            $cache->store("categories",$rootCategory);
+           }
         return $rootCategory['children'];
     }
 
@@ -77,21 +87,28 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
      */
     public function getCategory($categoryId)
     {
-        $storeId = Mage::getStoreConfig('tappz/general/store');
-        $tree = Mage::getResourceSingleton('catalog/category_tree')
-            ->load();
-        $root = $tree->getNodeById($categoryId);
-        if ($root && $root->getId() == 1) {
-            $root->setName(Mage::helper('catalog')->__('Root'));
+         $cache = Mage::helper('tappz/memcache');
+        $category  = $cache->get("category_".$categoryId);
+        if($category === FALSE) {
+            $storeId = Mage::getStoreConfig('tappz/general/store');
+            $tree = Mage::getResourceSingleton('catalog/category_tree')
+                ->load();
+            $root = $tree->getNodeById($categoryId);
+            if ($root && $root->getId() == 1) {
+                $root->setName(Mage::helper('catalog')->__('Root'));
+            }
+            $collection = Mage::getModel('catalog/category')->getCollection()
+                ->setStoreId($this->_getStoreId($storeId))
+                ->addAttributeToSelect('name') 
+                ->addAttributeToSelect('is_active')
+                ->addAttributeToFilter('include_in_menu', 1)
+
+                ->addIsActiveFilter();
+            $tree->addCollectionData($collection, true);
+            $category = $this->categoryToModel($root);
+           $cache->store("category_".$categoryId,$category);
         }
-        $collection = Mage::getModel('catalog/category')->getCollection()
-            ->setStoreId($this->_getStoreId($storeId))
-            ->addAttributeToSelect('name') 
-            ->addAttributeToSelect('is_active')
-            ->addAttributeToFilter('include_in_menu', 1)
-            ->addIsActiveFilter();
-        $tree->addCollectionData($collection, true);
-        return $this->categoryToModel($root);
+         return  $category;
     }
 
     /**
@@ -190,6 +207,9 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
      */
     public function getProduct($productId)
     {
+        $cache = Mage::helper('tappz/memcache');
+        $productInfo  = $cache->get("product_".$productId);
+        if($productInfo === FALSE) {
         $storeId = (int)Mage::getStoreConfig('tappz/general/store');
         if ($storeId <= 0) {
             $storeId = 1;
@@ -290,6 +310,8 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
         }
         $productAttributeCodeShippingInfo = Mage::getStoreConfig('tappz/catalog/productAttributeCodeShippingInfo');
         $productInfo['shipmentInformation'] = $product->getData($productAttributeCodeShippingInfo);
+         $cache->store("product_".$productId,$productInfo);
+          }
         return $productInfo;
     }
 
@@ -299,19 +321,24 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
      */
     public function getRelatedProducts($productId)
     {
-        $product = Mage::getModel('catalog/product')->load($productId);
-        $link = $product->getLinkInstance()
-            ->setLinkTypeId(Mage_Catalog_Model_Product_Link::LINK_TYPE_RELATED);
-        $collection = $link
-            ->getProductCollection()
-            ->setIsStrongMode()
-            ->setProduct($product);
-        $arData = array();
-        if (!empty($collection)) {
-            foreach ($collection as $_product):
-                array_push($arData, $this->getProduct($_product->getId()));
-            endforeach;
-        }
+        $cache = Mage::helper('tappz/memcache');
+        $arData  = $cache->get("relatedProduct_".$productId);
+        if($arData === FALSE) {
+        
+            $product = Mage::getModel('catalog/product')->load($productId);
+            $link = $product->getLinkInstance()
+                ->setLinkTypeId(Mage_Catalog_Model_Product_Link::LINK_TYPE_RELATED);
+            $collection = $link
+                ->getProductCollection()
+                ->setIsStrongMode()
+                ->setProduct($product);
+            $arData = array();
+            if (!empty($collection)) {
+                foreach ($collection as $_product):
+                    array_push($arData, $this->getProduct($_product->getId()));
+                endforeach;
+            }
+         }
         return $arData;
     }
 
