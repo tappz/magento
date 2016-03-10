@@ -123,7 +123,7 @@ class TmobLabs_Tappz_Model_Customer_Api extends Mage_Customer_Model_Api_Resource
          $store = Mage::getModel('core/store')->load($storeId);
          $curl = curl_init();
          curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
-         curl_setopt($curl, CURLOPT_URL, "https://graph.facebook.com/$facebookUserId?access_token=$facebookAccessToken");
+         curl_setopt($curl, CURLOPT_URL, "https://graph.facebook.com/$facebookUserId?fields=id,name,email,first_name,last_name,gender,verified,birthday&access_token=$facebookAccessToken");
          curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
          $result = curl_exec($curl);
          $userInfo =  json_decode($result);
