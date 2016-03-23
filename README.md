@@ -4,7 +4,7 @@ Bu branch Sadece turkpay modulü kullanan kullanıcılar için geçerlidir.
 
 Entegrasyonun tamamlanması için  
   - Wsdl Güncellenmesi 
-  ``` tappzBasketSelectPaymentMethodRequest  ``` methodunu güncellenmesi aşağıdaki gibi güncellenmesi gerekmektedir.
+  ``` tappzBasketPurchaseCreditCardRequest  ``` methodunu güncellenmesi aşağıdaki gibi güncellenmesi gerekmektedir.
   ```sh
     <message name="tappzBasketSelectPaymentMethodRequest">
         <part name="sessionId" type="xsd:string"/>
