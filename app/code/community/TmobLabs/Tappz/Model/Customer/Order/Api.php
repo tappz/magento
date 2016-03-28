@@ -2,10 +2,6 @@
 
 class TmobLabs_Tappz_Model_Customer_Order_Api extends Mage_Sales_Model_Order_Api
 {
-    /**
-     * @param $customerId
-     * @return array
-     */
     public function getList($customerId)
     {
         $customer = Mage::getModel('customer/customer')->load($customerId);
@@ -28,11 +24,7 @@ class TmobLabs_Tappz_Model_Customer_Order_Api extends Mage_Sales_Model_Order_Api
         }
         return $result;
     }
-    /**
-     * 
-     * @param type $orderId
-     * @return type
-     */
+
     public function info($orderId)
     {
         $order = Mage::getModel('sales/order');
@@ -51,21 +43,21 @@ class TmobLabs_Tappz_Model_Customer_Order_Api extends Mage_Sales_Model_Order_Api
             }
             $result['items'][] = $this->_getAttributes($item, 'order_item');
         }
+
         $result['payment'] = $this->_getAttributes($order->getPayment(), 'order_payment');
+
         $result['status_history'] = array();
+
         foreach ($order->getAllStatusHistory() as $history) {
             $result['status_history'][] = $this->_getAttributes($history, 'order_status_history');
         }
+
         $result['currency'] = $order->getOrderCurrency()->getCode();
         $result['shipping_address'] = $addressApi->get($order->getShippingAddress()->getCustomerAddressId());
         $result['billing_address'] = $addressApi->get($order->getBillingAddress()->getCustomerAddressId());
         return $this->prepareOrder($result);
     }
-    /**
-     * 
-     * @param type $order
-     * @return type
-     */
+
     protected function prepareOrder($order)
     {
         $decimalDivider = Mage::getStoreConfig('tappz/general/decimalSeparator');
@@ -136,6 +128,7 @@ class TmobLabs_Tappz_Model_Customer_Order_Api extends Mage_Sales_Model_Order_Api
             $line['priceTotal'] = number_format($item['row_total_incl_tax'], 2, $decimalDivider, $thousandDivider);
             $line['averageDeliveryDays'] = $item[$lineAverageDeliveryDaysAttributeCode];
             $line['variants'] = array();
+
             $result['lines'][] = $line;
         }
         $result['currency'] =  $order['currency'];

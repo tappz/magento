@@ -2,29 +2,24 @@
 
 class TmobLabs_Tappz_Model_Customer_Address_Api extends Mage_Api_Model_Resource_Abstract
 {
-    /**
-     * @param $addressId
-     * @return array
-     */
     public function get($addressId)
     {
         $address = Mage::getModel('customer/address')->load($addressId);
+
         if (!$address) {
             $this->_fault("404.11", "Address is not found.");
         }
+
         return $this->prepareAddress($address);
     }
 
-    /**
-     * @param $customerId
-     * @return array
-     */
     public function getList($customerId)
     {
         $customer = Mage::getModel('customer/customer')->load($customerId);
         if (!$customer) {
             $this->_fault("404.10", "Customer is not found.");
         }
+
         $addresses = array();
         foreach ($customer->getAddresses() as $address) {
             $addresses[] = $this->prepareAddress($address);
@@ -32,11 +27,6 @@ class TmobLabs_Tappz_Model_Customer_Address_Api extends Mage_Api_Model_Resource_
         return $addresses;
     }
 
-    /**
-     * @param $customerId
-     * @param $addressData
-     * @return array
-     */
     public function create($customerId, $addressData)
     {
         $addressAddressNameAttributeCode = Mage::getStoreConfig('tappz/address/name');
@@ -60,12 +50,18 @@ class TmobLabs_Tappz_Model_Customer_Address_Api extends Mage_Api_Model_Resource_
         $addressTelephoneAttributeCode = Mage::getStoreConfig('tappz/address/phone');;
         $addressIdentityNoAttributeCode = Mage::getStoreConfig('tappz/address/idNo');
         $addressPostcodeAttributeCode = Mage::getStoreConfig('tappz/address/postcode');
+
         $customer = Mage::getModel('customer/customer')
             ->load($customerId);
+        /* @var $customer Mage_Customer_Model_Customer */
+
         if (!$customer->getId()) {
             $this->_fault('customer_not_exists');
         }
+
         $address = Mage::getModel('customer/address');
+        /* @var $address Mage_Customer_Model_Address */
+
         $address->setData($addressAddressNameAttributeCode, $addressData->addressName);
         $address->setData($addressNameAttributeCode, $addressData->name);
         $address->setData($addressSurnameAttributeCode, $addressData->surname);
@@ -87,23 +83,24 @@ class TmobLabs_Tappz_Model_Customer_Address_Api extends Mage_Api_Model_Resource_
         $address->setData($addressTelephoneAttributeCode, $addressData->phoneNumber);
         $address->setData($addressIdentityNoAttributeCode, $addressData->identityNo);
         $address->setData($addressPostcodeAttributeCode, $addressData->zipCode);
+
         $address->setCustomer($customer);
+
         $valid = $address->validate();
+
         if (is_array($valid)) {
             $this->_fault('invalid_data', implode("\n", $valid));
         }
+
         try {
             $address->save();
         } catch (Mage_Core_Exception $e) {
             $this->_fault('invalid_data', $e->getMessage());
         }
+
         return $this->prepareAddress($address);
     }
 
-    /**
-     * @param $addressData
-     * @return array
-     */
     public function update($addressData)
     {
         $addressAddressNameAttributeCode = Mage::getStoreConfig('tappz/address/name');
@@ -127,12 +124,15 @@ class TmobLabs_Tappz_Model_Customer_Address_Api extends Mage_Api_Model_Resource_
         $addressTelephoneAttributeCode = Mage::getStoreConfig('tappz/address/phone');;
         $addressIdentityNoAttributeCode = Mage::getStoreConfig('tappz/address/idNo');
         $addressPostcodeAttributeCode = Mage::getStoreConfig('tappz/address/postcode');
+
+        /* @var $address Mage_Customer_Model_Address */
         $address = Mage::getModel('customer/address')
             ->load($addressData->id);
 
         if (!$address->getId()) {
             $this->_fault('not_exists');
         }
+
         $address->setData($addressAddressNameAttributeCode, $addressData->addressName);
         $address->setData($addressNameAttributeCode, $addressData->name);
         $address->setData($addressSurnameAttributeCode, $addressData->surname);
@@ -154,37 +154,34 @@ class TmobLabs_Tappz_Model_Customer_Address_Api extends Mage_Api_Model_Resource_
         $address->setData($addressTelephoneAttributeCode, $addressData->phoneNumber);
         $address->setData($addressIdentityNoAttributeCode, $addressData->identityNo);
         $address->setData($addressPostcodeAttributeCode, $addressData->zipCode);
+
         try {
             $address->save();
         } catch (Mage_Core_Exception $e) {
             $this->_fault('invalid_data', $e->getMessage());
         }
+
         return $this->prepareAddress($address);
     }
 
-    /**
-     * @param $address
-     * @return mixed
-     */
     public function delete($address)
     {
         $address = Mage::getModel('customer/address')
             ->load($address->id);
+
         if (!$address->getId()) {
             $this->_fault('not_exists');
         }
+
         try {
             $address->delete();
         } catch (Mage_Core_Exception $e) {
             $this->_fault('invalid_data', $e->getMessage());
         }
+
         return $address->getId();
     }
 
-    /**
-     * @param $address
-     * @return array
-     */
     protected function prepareAddress($address)
     {
         $addressAddressNameAttributeCode = Mage::getStoreConfig('tappz/address/name');
@@ -208,7 +205,9 @@ class TmobLabs_Tappz_Model_Customer_Address_Api extends Mage_Api_Model_Resource_
         $addressTelephoneAttributeCode = Mage::getStoreConfig('tappz/address/phone');;
         $addressIdentityNoAttributeCode = Mage::getStoreConfig('tappz/address/idNo');
         $addressPostcodeAttributeCode = Mage::getStoreConfig('tappz/address/postcode');
+
         $row = array();
+
         $row['id'] = '';
         $row['addressName'] = '';
         $row['name'] = '';
@@ -232,6 +231,7 @@ class TmobLabs_Tappz_Model_Customer_Address_Api extends Mage_Api_Model_Resource_
         $row['phoneNumber'] = '';
         $row['identityNo'] = '';
         $row['zipCode'] = '';
+
         $row['id'] = $address->getId();
         $row['addressName'] = $address->getData($addressAddressNameAttributeCode);
         if (!isset($row['addressName'])) {
@@ -245,6 +245,7 @@ class TmobLabs_Tappz_Model_Customer_Address_Api extends Mage_Api_Model_Resource_
         $row['countryCode'] = '';
         $countryId = $address->getData($addressCountryIdAttributeCode);
         if($countryId){
+            /* @var $country Mage_Directory_Model_Country */
             $country = Mage::getModel('directory/country')->load($countryId);
             $country->getName(); // Loading name in default locale
             $row['country'] = $country->getName();
@@ -265,30 +266,27 @@ class TmobLabs_Tappz_Model_Customer_Address_Api extends Mage_Api_Model_Resource_
         $row['phoneNumber'] = $address->getData($addressTelephoneAttributeCode);
         $row['identityNo'] = $address->getData($addressIdentityNoAttributeCode);
         $row['zipCode'] = $address->getData($addressPostcodeAttributeCode);
+
         return $row;
     }
 
-    /**
-     * @return array
-     */
     public function countryList()
     {
         $collection = Mage::getModel('directory/country')->getCollection();
+
         $result = array();
         foreach ($collection as $country) {
-            $country->getName();
+            /* @var $country Mage_Directory_Model_Country */
+            $country->getName(); // Loading name in default locale
             $location = array();
             $location['code'] = $country->getId();
             $location['name'] = $country->getName();
             $result[] = $location;
         }
+
         return $result;
     }
 
-    /**
-     * @param $countryId
-     * @return array
-     */
     public function stateList($countryId)
     {
         try {
@@ -296,9 +294,11 @@ class TmobLabs_Tappz_Model_Customer_Address_Api extends Mage_Api_Model_Resource_
         } catch (Mage_Core_Exception $e) {
             $this->_fault('country_not_exists', $e->getMessage());
         }
+
         if (!$country->getId()) {
             $this->_fault('country_not_exists');
         }
+
         $result = array();
         foreach ($country->getRegions() as $region) {
             $region->getName(); // Loading name in default locale
@@ -307,53 +307,25 @@ class TmobLabs_Tappz_Model_Customer_Address_Api extends Mage_Api_Model_Resource_
             $location['name'] = $region->getName();
             $result[] = $location;
         }
+
         return $result;
     }
 
-    /**
-     * @param $stateId
-     * @return array
-     *
-     */
     public function cityList($stateId)
     {
-        try {
-            $country = Mage::getModel('directory/country')->load($stateId);
-        } catch (Mage_Core_Exception $e) {
-            $this->_fault('country_not_exists', $e->getMessage());
-        }
-        if (!$country->getId()) {
-            $this->_fault('country_not_exists');
-        }
-        $result = array();
-        foreach ($country->getRegions() as $region) {
-            $region->getName(); // Loading name in default locale
-            $location = array();
-            $location['code'] = $region->getId();
-            $location['name'] = $region->getName();
-            $result[] = $location;
-        }
-        return $result;      
-    }
-
-    /**
-     * @param $stateId
-     * @return array
-     *
-     */
-    public function districtList($stateId)
-    {
-
+        // TODO : mcgoncu
         return array();
     }
 
-    /**
-     * @param $stateId
-     * @return array
-     *
-     */
+    public function districtList($stateId)
+    {
+        // TODO : mcgoncu
+        return array();
+    }
+
     public function townList($stateId)
     {
+        // TODO : mcgoncu
         return array();
     }
 }
