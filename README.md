@@ -6,7 +6,7 @@ Entegrasyonun tamamlanması için
   - Wsdl Güncellenmesi 
   ``` tappzBasketPurchaseCreditCardRequest  ``` methodunu güncellenmesi aşağıdaki gibi güncellenmesi gerekmektedir.
   ```sh
-    <message name="tappzBasketSelectPaymentMethodRequest">
+    <message name="tappzBasketPurchaseCreditCardRequest">
         <part name="sessionId" type="xsd:string"/>
         <part name="quoteId" type="xsd:string"/>
         <part name="payment" type="typens:payment"/>
