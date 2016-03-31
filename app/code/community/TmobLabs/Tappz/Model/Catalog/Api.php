@@ -119,29 +119,35 @@ class TmobLabs_Tappz_Model_Catalog_Api extends Mage_Catalog_Model_Api_Resource
      * @param $sort
      * @return array
      */
-    public function getProductList($phrase, $categoryId, $pageNumber, $pageSize, $filterQuery, $sort)
+        public function getProductList($phrase, $categoryId, $pageNumber, $pageSize, $filterQuery, $sort)
     {
-        if($categoryId){
-            $category = Mage::getModel("catalog/category")->load($categoryId);
-            $collection = $category->getProductCollection()
-                ->addAttributeToSelect('')
-                ->addAttributeToFilter('status', '1')
-                ->addAttributeToFilter('visibility', Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH);
-        }else{
-            $collection = Mage::getModel('catalog/product')
-                ->getCollection()
-                ->addAttributeToSelect('')
-                ->addAttributeToFilter('status', '1')
-                ->addAttributeToFilter('visibility', Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH);
+        $storeId = (int)Mage::getStoreConfig('tappz/general/store');
+        if ($storeId <= 0) {
+          $storeId = 1;
         }
-        if (!empty($filter)) {
+        Mage::app()->setCurrentStore($storeId);
+        if($categoryId){
+		$layer = Mage::getModel('catalog/layer');
+		$category = Mage::getModel("catalog/category")->load($categoryId);
+		$layer->setCurrentCategory($category);
+		$collection = $layer->getProductCollection()
+	    ->addAttributeToSelect('*');
+	}else{
+	$collection = Mage::getModel('catalog/product')
+            ->getCollection()
+            ->addAttributeToSelect('*')
+            ->addAttributeToFilter('status', '1')
+            ->addAttributeToFilter('visibility', Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH);
+		}
+    if (!empty($filter)) {
             foreach ($filter as $f) {
                 if (isset($f->selected)) {
                     $collection->addAttributeToSelect($f->id)
                         ->addAttributeToFilter($f->id, $f->selected->id);
                 }
             }
-        }
+    }
+ 
         if (!empty($phrase))
             $collection->addAttributeToFilter('name', array('like' => "%$phrase%"));
         if (!empty($categoryId)) {
