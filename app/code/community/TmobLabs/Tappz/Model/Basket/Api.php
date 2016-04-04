@@ -503,7 +503,6 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
             ->setStoreId($store)
             ->load($quoteId);
         $paymentData = array();
-
         switch ($payment->methodType) {
             case "CreditCard":
                 $creditCard = $payment->creditCard;
@@ -534,7 +533,7 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
                     $session->setData('ccType', $type);
                     $session->setData('expYear', $creditCard->year);
                     $session->setData('expMonth', $creditCard->month);
-
+                    $session->setData('cvv', $creditCard->cvv);
                 } else {
                     return $this->get($quote->getId());
                 }
@@ -557,7 +556,9 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
         $paymentData['method'] = $paymentMethod;
         $quote = $this->setPaymentData($quote, $paymentData);
         return $this->get($quote->getId());
-    }
+        }
+
+        
     /**
      * @param $quote
      * @param $paymentData
@@ -720,29 +721,63 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
      */
     public function purchaseCreditCard($quoteId,$payment)
     {
-        $payment->bankCode;
-        $payment->installment;
-        $payment->creditCard->owner;
-        $payment->creditCard->number;
-        $payment->creditCard->cvv;
-        $payment->creditCard->month;
-        $payment->creditCard->year;
-        /**
-         *  Do your request here
-         *
-         */
-       $msg = "Error";
-       if(strtolower(trim($msg)) == "success"){
-            $store = Mage::getStoreConfig('tappz/general/store');
-            $quote = Mage::getModel("sales/quote")
-                ->setStoreId($store)
-                ->load($quoteId);
-            $orderId = $this->purchase($quote);
+        $store = Mage::getStoreConfig('tappz/general/store');
+        $quote = Mage::getModel("sales/quote")->setStoreId($store)->load($quoteId);
+        $orderId = $this->purchase($quote);
+
+        $api_key = "YOUR-TOKEN";
+        $post_arr = array(
+                    "banka"                =>  $payment->bankCode,
+                    "taksit"            => $payment->installment,
+                    "cc_owner"            =>$payment->creditCard->owner,
+                    "cc_number"            =>$payment->creditCard->number,
+                    "cc_cvv"            => $payment->creditCard->cvv,
+                    "cc_expire_month"    => $payment->creditCard->month,
+                    "cc_expire_year"    =>$payment->creditCard->year,
+                    "order_id"            => "$orderId",
+                    //"quote_id"            => "$quoteId",
+                    "date"                => date("Y-m-d H:i:s"),
+                    "customer_ip"        => $this->getClientIP(),
+                );
+        $hash_text = $post_arr['order_id'].
+                //$post_arr['quote_id'].
+                $post_arr['banka'].
+                $post_arr['cc_number'].
+                $api_key.$post_arr['date'];
+        $hash = md5($hash_text);
+        $post_arr["grinet_mobile_hash"] = $hash;
+        $url = Mage::getBaseUrl (Mage_Core_Model_Store::URL_TYPE_WEB)."gtrpay/grinet/".$post_arr['banka']."_payment/";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,$url);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,2);
+        curl_setopt($ch, CURLOPT_SSLVERSION, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 90);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_arr);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $msg  = json_decode($result);        
+        $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
+        if( strtolower( trim($msg->status)) == "error" ){
+            if(isset($msg->system_message)){
+                    $error_msg = $msg->system_message;
+            }
+            elseif(isset($msg->error_message)){
+                $error_msg = $msg->error_message;
+            }elseif(isset($msg->customer_message)){
+                   $error_msg = $msg->customer_message;
+            }
+            $order->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT, true)->save();
+             $this->_fault('invalid_data',$error_msg);
+        }elseif(strtolower( trim($msg->status)) == "success") {
+            $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true)->save();
             return Mage::getSingleton('tappz/Customer_Order_Api')->info($orderId);
-        }else if( strtolower( trim($msg)) == "error" ){
-                $this->_fault('invalid_data',"Set your error message here");
         }else{
-            $this->_fault('invalid_data',  ( $msg));
+            $order->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT, true)->save();
+            $this->_fault('invalid_data',"Unknown payment status");
         }
     }
     public function getClientIP(){
@@ -1029,7 +1064,7 @@ class TmobLabs_Tappz_Model_Basket_Api extends Mage_Api_Model_Resource_Abstract
                     /**
                      * Bank type
                      */
-                    $bankInfos[$bankCount]['type'] = null;
+                    $bankInfos[$bankCount]['type'] = $bank_code;
                     /**
                      * Bank  installments (example :  if you have   9 months installments you should simply  add "9"  )
                      */
